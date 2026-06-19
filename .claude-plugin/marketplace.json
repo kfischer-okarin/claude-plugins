@@ -1,0 +1,14 @@
+{
+  "name": "kfischer-okarin-plugins",
+  "description": "Personal Claude Code plugins.",
+  "owner": {
+    "name": "Kevin Fischer"
+  },
+  "plugins": [
+    {
+      "name": "my-skills",
+      "source": "./my-skills",
+      "description": "A small collection of personal Claude Code skills."
+    }
+  ]
+}
