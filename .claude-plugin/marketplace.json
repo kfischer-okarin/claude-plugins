@@ -8,7 +8,8 @@
     {
       "name": "my-skills",
       "source": "./my-skills",
-      "description": "A small collection of personal Claude Code skills."
+      "description": "A small collection of personal Claude Code skills.",
+      "license": "MIT"
     }
   ]
 }

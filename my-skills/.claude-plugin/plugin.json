@@ -1,6 +1,7 @@
 {
   "name": "my-skills",
   "description": "A small collection of personal Claude Code skills.",
+  "license": "MIT",
   "author": {
     "name": "Kevin Fischer"
   }
