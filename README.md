@@ -25,3 +25,7 @@ A small collection of personal Claude Code skills.
 | `rough-planning` | Run a requirements hearing, then produce and maintain a lightweight, living plan/progress document for phase-based work. |
 | `my-review` | Review the current changes using any local repo review guidelines, then run the built-in `code-review` skill at high effort and save the result. |
 | `check-review-comments` | Fetch review comments on the current PR from GitHub and triage each on importance vs. effort. |
+
+| Agent | What it does |
+|---|---|
+| `document-rot-reviewer` | Fresh-eyes reviewer that flags "documentation rot" (historical war-stories, bloat, staleness, redundancy) in comments and prose docs while preserving load-bearing "why". |

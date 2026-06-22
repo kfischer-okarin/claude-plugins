@@ -16,3 +16,9 @@ existing files in this repo as the source of truth.
   writing.
 - Verify field names, allowed values, and the overall structure against that
   documentation, then apply them.
+
+## Keep the README in sync
+
+Whenever you add, remove, or rename a plugin component (skill, agent, hook,
+etc.), update `README.md` to match — the per-plugin component tables there are
+the user-facing list and must stay accurate.
