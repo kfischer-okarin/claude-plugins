@@ -3,17 +3,29 @@
 
 ## Goal
 
-<!-- WHAT changes and WHY, as prose: the current problem, why it's worth changing,
-     what the change enables. Sourced from the hearing. Keep implementation
-     mechanics out (how the current code works, function/constant names, sort
-     strategies) — those belong in Phases. -->
+<!-- WHAT changes and WHY, as prose. Cover the current problem, why it's worth
+     changing, and what the change enables. Sourced from the hearing.
+     Keep implementation mechanics out — how the current code works,
+     function/constant names, sort strategies, your own design choices. Those
+     are decided in Phases, not here. -->
 {{ GOAL }}
+
+### Non-goals
+
+<!-- Things deliberately NOT part of this work, and not planned for later either
+     — they bound the scope. Distinct from Deferred work, which IS wanted, just
+     not now. Only list non-goals the user actually called out. Drop this
+     subsection if there are none. -->
+- {{ NON-GOAL 1 }}
+- ...
 
 ### Constraints / Requirements of the Solution
 
-<!-- Each item is something the user said in the hearing: what the solution must
-     or must not do, what it must reuse, integrate with, or avoid. Not your own
-     design or implementation choices — those get decided in Phases. -->
+The HOW dimension: how the solution must behave.
+<!-- Each item is something the user said in the hearing about how the solution
+     must work — what it must or must not do, what it must reuse, integrate with,
+     or avoid. These constrain the implementation approach. They are NOT your own
+     design or implementation choices, which get decided in Phases. -->
 - {{ CONSTRAINT 1 }}
 - ...
 
@@ -21,10 +33,14 @@
 
 Current understanding of the implementation. Later phases are a rough direction
 and may change as things are learned.
-<!-- A checklist of (somewhat) independent units of work. If possible the first
-     phase is a quick-and-dirty end-to-end thin slice that stubs or hardcodes
-     freely. Only the current phase carries a sub-step todo-list — never pre-write
-     sub-steps for future phases. Design and implementation decisions live here. -->
+<!-- A checklist of (somewhat) independent units of work, each a coherent chunk
+     rather than an arbitrary slice. If possible the first phase is a
+     quick-and-dirty end-to-end thin slice that stubs or hardcodes freely to get
+     the feature running without breaking existing tests; later phases properly
+     implement what it stubbed. Only the current phase carries a sub-step
+     todo-list — never pre-write sub-steps for future phases, since what you
+     learn will likely invalidate them. Design and implementation decisions live
+     here, not in Goal or Constraints. -->
 
 - [ ] **P1: {{ PHASE 1 TITLE }}**
       {{ PHASE 1 DESCRIPTION }}
@@ -32,24 +48,25 @@ and may change as things are learned.
 
 ## Current position / notes
 
-<!-- One or two lines: where you are, what's next. -->
+<!-- One or two lines only: where you are right now and what's next. Keep it
+     pointing at the next action as the work moves. -->
 - {{ CURRENT STATE }}
 
 ## Deferred work
 
-<!-- Work the user recognized as wanted or needed but deliberately pushed out of
-     this round — "we want this, just not now". Only items the user actually
-     decided to defer. Not permanent non-goals: if it was never going to be part
-     of the work, it does not go here. -->
+<!-- Work identified as necessary or wanted but deliberately pushed out of this
+     round — "we want this, just not now". Only items the user actually decided
+     to defer. Not permanent non-goals (those go under Non-goals): if it was
+     never going to be part of the work, it does not go here. -->
 - {{ DEFERRED WORK 1 }}
 - ...
 
-## Appendix: Working Principles
+## Appendix
+
+### Working Principles
 
 How to execute and update this plan across sessions.
 
-- **Get the plan approved before implementing.** Present the plan, ask for
-  approval, fix what's flagged, then start.
 - **Before each phase, describe the rough design approach and get a quick OK** —
   where things get added/changed at a high level. Stay high-level on purpose:
   don't lock down low-level choices in advance. Implementing the phase settles
@@ -59,14 +76,17 @@ How to execute and update this plan across sessions.
   sub-steps for future phases — what you learn will likely invalidate them.
 - **When you complete a sub-step, rewrite it in place in past tense**, folding in
   what you did, what you learned, and how you verified it in abstract terms (e.g.
-  "ran acceptance tests", "ran unit tests", "tested manually via the CLI"). Don't
-  append a separate "Done" summary. Check off the phase once all its sub-steps are.
+  "ran acceptance tests", "ran unit tests", "tested manually via the CLI"). No
+  need to cite concrete test counts. Don't append a separate "Done" summary.
+  Check off the phase once all its sub-steps are.
 - **When you discover a "do this later, within this work" item:** add it as a
   sub-step if it belongs to the current phase, otherwise note it in the relevant
   future phase's description.
-- **When the user defers a wanted item out of this round, move it to Deferred
-  work.**
-- **Keep "Current position / notes" pointing at what's next.**
+- **When a piece of work is identified as necessary but not part of this round,
+  move it to Deferred work** — wanted, just not now. If instead it will not be
+  done at all, it belongs under Non-goals.
+- **Keep "Current position / notes" pointing at where you are and what's next**,
+  updating it as the work moves.
 
 ### Example phases in progress
 

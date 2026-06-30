@@ -16,49 +16,51 @@ they will change.
 - You are about to start non-trivial implementation and want a shared map first.
 - Work will proceed end-to-end-first (get a thin slice working), then deepen.
 
-Write the file as `<FEATURE>_PLAN.md` (or wherever the user points). Start from
-`TEMPLATE.md` in this skill directory — `{{ ... }}` marks what you replace;
-`<!-- ... -->` comments are per-section scope instructions for you (and the
-template reviewer below), so strip them from the finished plan; everything else
-is fixed document text. The template ends with a **Working Principles** appendix;
-keep it in the plan so the principles for executing and updating the plan travel
-with the file into later sessions.
+## Step 1: Prepare the plan template
 
-## Step 1: Requirements hearing
+Copy the template to the plan file — `<FEATURE>_PLAN.md` in the repo root, or
+wherever the user points:
+
+```bash
+cp "${CLAUDE_SKILL_DIR}/TEMPLATE.md" <FEATURE>_PLAN.md
+```
+
+You fill this file in over the next steps. The template ends with a **Working
+Principles** appendix; it stays in the plan so the principles for executing and
+updating it travel with the file into later sessions.
+
+## Step 2: Requirements hearing
 
 Before writing the plan, drive out ambiguity. Use the `AskUserQuestion` tool to
-do an in-depth interview about:
+ask about:
 
 - **The use case** — what is actually wanted, and why. Surface the goal and the
   background, not just the surface request.
-- **Implementation constraints** — what the solution must or must not do, what it
-  must reuse, integrate with, or avoid.
+- **How the solution must behave** — what it must or must not do, what it must
+  reuse, integrate with, or avoid. This HOW dimension becomes the Constraints /
+  Requirements section.
+- **What is wanted but not now** — work the user recognizes as needed eventually
+  but deliberately defers out of this round. This becomes Deferred work.
+- **What is explicitly not a goal** — work the user rules out entirely, now and
+  later. This becomes Non-goals and bounds the scope.
 
 Be thorough about exposing unclear points. Research the codebase in parallel so
-your questions are concrete. Keep asking until the goal and the constraints are
-clear enough to write down. The Goal and the Constraints/Requirements section of
-the plan come directly out of this hearing.
+your questions are concrete. Keep asking until the goal, the constraints, and the
+scope boundaries are clear enough to write down. Goal, Non-goals, Constraints, and
+Deferred work all come directly out of this hearing.
 
-## Document structure
+## Step 3: Write the plan
 
-See `TEMPLATE.md` for the skeleton.
+Fill in the copied template. The file is already structured for you, with the
+scope of each section spelled out in its `<!-- -->` comment.
 
-1. **Title** — just the feature name. No subtitle describing the document.
-2. **Goal** — WHAT and WHY, as prose. The current problem, why it's worth
-   changing, what the change enables. No implementation details here.
-3. **Constraints / Requirements of the Solution** — a subsection under Goal.
-   The constraints and requirements on the implementation approach, each sourced
-   from what the user said in the hearing.
-4. **Phases** — the current understanding of the implementation, as a checklist.
-   Each phase has a short description; the phase you're currently in also carries
-   a todo-list of its sub-steps (you add those once you start it — see Working
-   cadence). This is a TODO list you maintain, not a fixed schedule.
-5. **Current position / notes** — one or two lines: where you are, what's next.
-6. **Deferred work** — work the user recognized as wanted or needed but
-   deliberately pushed out of this round. Not a list of permanent non-goals: if
-   it was never going to be part of the work, it does not go here.
+**Only touch the `{{ ... }}` placeholders and the `<!-- -->` comments** — replace
+each placeholder with real content, and delete the comments once the section is
+written. Everything else in the template is intentional plan text: the fixed
+prose, the section headings, the Working Principles appendix, and the example
+phases all stay exactly as written. Do not reword, trim, or "improve" them.
 
-## Phasing principles
+### Phasing principles
 
 - **Each phase is a (somewhat) independent logical unit of work.** It builds on
   earlier phases, but stands on its own as a coherent chunk — not an arbitrary
@@ -72,7 +74,7 @@ See `TEMPLATE.md` for the skeleton.
 - **The following phases refine and properly implement the individual sub-parts**
   that the first phase stubbed or skipped.
 
-## Hard rules
+### Hard rules
 
 - **No meta-commentary about the plan itself.** Do not write "lightweight
   progress tracker", a "how we'll work" section, "(incomplete is fine)"
@@ -82,7 +84,7 @@ See `TEMPLATE.md` for the skeleton.
   gives feedback on the plan's wording, apply the minimal change in the doc's
   style. Don't record why they asked for it or quote the exchange.
 
-## Review before approval
+## Step 4: Review before approval
 
 Once the plan is written, and before you present it for approval, put it through
 two adversarial reviews. Run them in parallel as subagents, and have each return
@@ -97,14 +99,16 @@ its findings rather than edit the plan:
   section of the plan against that section's scope instructions (the `<!-- -->`
   comments), flagging content that belongs in a different section or breaks a
   hard rule — e.g. implementation mechanics in Goal, your own design choices in
-  Constraints, permanent non-goals in Deferred work, or meta-commentary about the
-  plan.
+  Constraints, a permanent non-goal filed under Deferred work, or meta-commentary
+  about the plan. Pass this reviewer the path to the current session's
+  transcript — the JSONL file named `${CLAUDE_SESSION_ID}.jsonl` under
+  `~/.claude/projects/` — so it can verify that Goal, Constraints, Deferred work,
+  and Non-goals trace back to what the user actually said in the hearing.
 
 Apply the findings you agree with, then present the plan for approval.
 
-## Executing the plan
+## Step 5: Get approval, then work the plan
 
-The principles for working through and updating the plan live in the **Working
-Principles** appendix of `TEMPLATE.md`, so they stay with the plan across
-sessions. Follow them when implementing — and when you pick up an existing plan,
-read its appendix first.
+Present the plan and ask for approval. Fix what's flagged, then start
+implementing, following the **Working Principles** in the template's appendix.
+When you pick up an existing plan in a later session, read that appendix first.
