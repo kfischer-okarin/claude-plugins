@@ -18,14 +18,16 @@ they will change.
 
 Write the file as `<FEATURE>_PLAN.md` (or wherever the user points). Start from
 `TEMPLATE.md` in this skill directory — `{{ ... }}` marks what you replace;
-everything else is fixed document text. The template ends with a **Working
-Principles** appendix; keep it in the plan so the principles for executing and
-updating the plan travel with the file into later sessions.
+`<!-- ... -->` comments are per-section scope instructions for you (and the
+template reviewer below), so strip them from the finished plan; everything else
+is fixed document text. The template ends with a **Working Principles** appendix;
+keep it in the plan so the principles for executing and updating the plan travel
+with the file into later sessions.
 
 ## Step 1: Requirements hearing
 
 Before writing the plan, drive out ambiguity. Use the `AskUserQuestion` tool to
-ask about:
+do an in-depth interview about:
 
 - **The use case** — what is actually wanted, and why. Surface the goal and the
   background, not just the surface request.
@@ -52,8 +54,9 @@ See `TEMPLATE.md` for the skeleton.
    a todo-list of its sub-steps (you add those once you start it — see Working
    cadence). This is a TODO list you maintain, not a fixed schedule.
 5. **Current position / notes** — one or two lines: where you are, what's next.
-6. **Out of scope** — things the user clearly identified as out of scope for this
-   work.
+6. **Deferred work** — work the user recognized as wanted or needed but
+   deliberately pushed out of this round. Not a list of permanent non-goals: if
+   it was never going to be part of the work, it does not go here.
 
 ## Phasing principles
 
@@ -78,6 +81,26 @@ See `TEMPLATE.md` for the skeleton.
 - **Don't leave the user's editing reasoning in the document.** When the user
   gives feedback on the plan's wording, apply the minimal change in the doc's
   style. Don't record why they asked for it or quote the exchange.
+
+## Review before approval
+
+Once the plan is written, and before you present it for approval, put it through
+two adversarial reviews. Run them in parallel as subagents, and have each return
+its findings rather than edit the plan:
+
+- **Against the documentation and codebase.** This reviewer re-checks every
+  factual claim in the plan — sources, names, orderings, how the current code
+  behaves — against the actual project documentation and code, and flags anything
+  unsupported, misattributed, or contradicted. Its job is to catch claims that
+  sound right but the sources do not back.
+- **Against the template.** This reviewer reads `TEMPLATE.md` and checks each
+  section of the plan against that section's scope instructions (the `<!-- -->`
+  comments), flagging content that belongs in a different section or breaks a
+  hard rule — e.g. implementation mechanics in Goal, your own design choices in
+  Constraints, permanent non-goals in Deferred work, or meta-commentary about the
+  plan.
+
+Apply the findings you agree with, then present the plan for approval.
 
 ## Executing the plan
 
