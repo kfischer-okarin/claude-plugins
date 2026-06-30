@@ -56,8 +56,9 @@ scope of each section spelled out in its `<!-- -->` comment.
 **Only touch the `{{ ... }}` placeholders and the `<!-- -->` comments** — replace
 each placeholder with real content, and delete the comments once the section is
 written. Everything else in the template is intentional plan text: the fixed
-prose, the section headings, the Working Principles appendix, and the example
-phases all stay exactly as written. Do not reword, trim, or "improve" them.
+prose, the section headings, the Working Principles appendix, and the "Example
+phases in progress" illustration all stay exactly as written. Do not reword,
+trim, or "improve" them.
 
 ### Phasing principles
 
@@ -109,5 +110,5 @@ Apply the findings you agree with, then present the plan for approval.
 ## Step 5: Get approval, then work the plan
 
 Present the plan and ask for approval. Fix what's flagged, then start
-implementing, following the **Working Principles** in the template's appendix.
+implementing, following the **Working Principles** in the plan's appendix.
 When you pick up an existing plan in a later session, read that appendix first.

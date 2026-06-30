@@ -37,10 +37,8 @@ and may change as things are learned.
      rather than an arbitrary slice. If possible the first phase is a
      quick-and-dirty end-to-end thin slice that stubs or hardcodes freely to get
      the feature running without breaking existing tests; later phases properly
-     implement what it stubbed. Only the current phase carries a sub-step
-     todo-list — never pre-write sub-steps for future phases, since what you
-     learn will likely invalidate them. Design and implementation decisions live
-     here, not in Goal or Constraints. -->
+     implement what it stubbed. Design and implementation decisions live here,
+     not in Goal or Constraints. -->
 
 - [ ] **P1: {{ PHASE 1 TITLE }}**
       {{ PHASE 1 DESCRIPTION }}
