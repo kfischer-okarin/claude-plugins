@@ -10,22 +10,22 @@
      are decided in Phases, not here. -->
 {{ GOAL }}
 
-### Non-goals
+## Non-goals
 
 <!-- Things deliberately NOT part of this work, and not planned for later either
      — they bound the scope. Distinct from Deferred work, which IS wanted, just
-     not now. Only list non-goals the user actually called out. Drop this
-     subsection if there are none. -->
+     not now. Only list non-goals the user actually called out. -->
 - {{ NON-GOAL 1 }}
 - ...
 
-### Constraints / Requirements of the Solution
+## Constraints / Requirements of the Solution
 
-The HOW dimension: how the solution must behave.
-<!-- Each item is something the user said in the hearing about how the solution
-     must work — what it must or must not do, what it must reuse, integrate with,
-     or avoid. These constrain the implementation approach. They are NOT your own
-     design or implementation choices, which get decided in Phases. -->
+Guardrails for the implementation approach — the conditions any acceptable
+solution has to satisfy.
+<!-- Each item is a guardrail the user set in the hearing: what the solution must
+     or must not do, what it must reuse, integrate with, or avoid. They bound the
+     implementation approach without dictating it. NOT your own design or
+     implementation choices, which get decided in Phases. -->
 - {{ CONSTRAINT 1 }}
 - ...
 
@@ -86,7 +86,9 @@ How to execute and update this plan across sessions.
   move it to Deferred work** — wanted, just not now. If instead it will not be
   done at all, it belongs under Non-goals.
 - **Keep "Current position / notes" pointing at where you are and what's next**,
-  updating it as the work moves.
+  updating it as the work moves — one or two lines only.
+- **Never delete a section that goes empty.** If a section has no items, or its
+  items all get resolved, leave the heading and write `- (None)` under it.
 
 ### Example phases in progress
 

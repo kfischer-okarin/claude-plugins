@@ -25,29 +25,28 @@ wherever the user points:
 cp "${CLAUDE_SKILL_DIR}/TEMPLATE.md" <FEATURE>_PLAN.md
 ```
 
-You fill this file in over the next steps. The template ends with a **Working
-Principles** appendix; it stays in the plan so the principles for executing and
-updating it travel with the file into later sessions.
+You fill this file in over the next steps.
 
 ## Step 2: Requirements hearing
 
-Before writing the plan, drive out ambiguity. Use the `AskUserQuestion` tool to
-ask about:
+Before writing the plan, conduct an in-depth interview to drive out ambiguity.
+Use the `AskUserQuestion` tool to explore:
 
 - **The use case** — what is actually wanted, and why. Surface the goal and the
   background, not just the surface request.
-- **How the solution must behave** — what it must or must not do, what it must
-  reuse, integrate with, or avoid. This HOW dimension becomes the Constraints /
-  Requirements section.
+- **The guardrails on the approach** — the conditions any acceptable solution
+  must satisfy: what it must or must not do, what it must reuse, integrate with,
+  or avoid. These become the Constraints / Requirements section.
 - **What is wanted but not now** — work the user recognizes as needed eventually
   but deliberately defers out of this round. This becomes Deferred work.
 - **What is explicitly not a goal** — work the user rules out entirely, now and
   later. This becomes Non-goals and bounds the scope.
 
 Be thorough about exposing unclear points. Research the codebase in parallel so
-your questions are concrete. Keep asking until the goal, the constraints, and the
-scope boundaries are clear enough to write down. Goal, Non-goals, Constraints, and
-Deferred work all come directly out of this hearing.
+your questions are concrete. Continue the interview until you judge every area is
+sufficiently explored — the goal, the guardrails, and the scope boundaries clear
+enough to write down. Goal, Non-goals, Constraints, and Deferred work all come
+directly out of this hearing.
 
 ## Step 3: Write the plan
 
