@@ -1,6 +1,7 @@
 ---
 name: check-review-comments
-description: Fetch review comments on the current PR from GitHub, then judge each on importance vs. effort. Use when the user asks to check, list, pull, or triage review comments, PR comments, or reviewer feedback on the current branch or PR.
+description: Fetch review comments on the current PR from GitHub, then judge each on importance vs. effort.
+disable-model-invocation: true
 argument-hint: "[pr-number]"
 allowed-tools: Bash(gh *), Bash(${CLAUDE_SKILL_DIR}/scripts/gather-comments.sh *)
 ---
