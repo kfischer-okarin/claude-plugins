@@ -22,10 +22,10 @@
 
 Guardrails for the implementation approach — the conditions any acceptable
 solution has to satisfy.
-<!-- Each item is a guardrail the user set in the hearing: what the solution must
-     or must not do, what it must reuse, integrate with, or avoid. They bound the
-     implementation approach without dictating it. NOT your own design or
-     implementation choices, which get decided in Phases. -->
+<!-- Each item is a guardrail the user set in the hearing: what the solution
+     must or must not do, what it must reuse, integrate with, or avoid. They
+     bound the implementation approach without dictating it. NOT your own design
+     or implementation choices, which get decided in Phases. -->
 - {{ CONSTRAINT 1 }}
 - ...
 
@@ -69,14 +69,14 @@ How to execute and update this plan across sessions.
   where things get added/changed at a high level. Stay high-level on purpose:
   don't lock down low-level choices in advance. Implementing the phase settles
   them naturally, and pinning them early just creates spec churn.
-- **Write a sub-step todo-list only for the phase you're currently in**, and only
-  after you've described and confirmed its rough approach. Never pre-write
+- **Write a sub-step todo-list only for the phase you're currently in**, and
+  only after you've described and confirmed its rough approach. Never pre-write
   sub-steps for future phases — what you learn will likely invalidate them.
-- **When you complete a sub-step, rewrite it in place in past tense**, folding in
-  what you did, what you learned, and how you verified it in abstract terms (e.g.
-  "ran acceptance tests", "ran unit tests", "tested manually via the CLI"). No
-  need to cite concrete test counts. Don't append a separate "Done" summary.
-  Check off the phase once all its sub-steps are.
+- **When you complete a sub-step, rewrite it in place in past tense**, folding
+  in what you did, what you learned, and how you verified it in abstract terms
+  (e.g. "ran acceptance tests", "ran unit tests", "tested manually via the
+  CLI"). No need to cite concrete test counts. Don't append a separate "Done"
+  summary. Check off the phase once all its sub-steps are.
 - **When you discover a "do this later, within this work" item:** add it as a
   sub-step if it belongs to the current phase, otherwise note it in the relevant
   future phase's description.
@@ -90,6 +90,7 @@ How to execute and update this plan across sessions.
 
 ### Example phases in progress
 
+``` markdown
 - [x] **P1: Webhooks persisted end-to-end**
   Quick-and-dirty thin slice: receive a webhook, store it, show it in the admin list.
   - [x] Added deliveries table + model
@@ -101,6 +102,7 @@ How to execute and update this plan across sessions.
   - [ ] Enqueue the retry job with capped backoff
 - [ ] **P3: Redact secrets in stored payloads**
   Direction only — exact redaction rules still open.
+```
 
 P1 is done: its sub-steps are rewritten in past tense and carry what/learned/how
 inline. P2 is current, so it has a sub-step todo-list. P3 is still future — just a
