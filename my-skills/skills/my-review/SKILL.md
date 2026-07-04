@@ -1,6 +1,6 @@
 ---
 name: my-review
-description: Review the current changes using any local repo review guidelines, then run the built-in code-review skill at high effort and save the result. Use when the user asks for "my review" of a diff, branch, or changes.
+description: Review the current changes using any local repo review guidelines, then run the built-in code-review skill at high effort and save the result.
 disable-model-invocation: true
 allowed-tools: Skill(code-review)
 ---
