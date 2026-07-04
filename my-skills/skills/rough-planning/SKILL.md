@@ -1,6 +1,6 @@
 ---
 name: rough-planning
-description: Run a requirements hearing, then produce and maintain a lightweight, living plan/progress document for incremental, phase-based feature work — approved up front and updated as you go, not a heavy upfront spec. Use when the user asks to plan a feature, write a plan or progress doc, track work across phases, or work end-to-end-first then deepen. Also use when starting any non-trivial implementation that will span multiple commits.
+description: Run a requirements hearing, then produce and maintain a lightweight, living plan/progress document for incremental, phase-based feature work — approved up front and revised as work proceeds, not a heavy upfront spec. Use when the user asks to plan a feature, write or update a plan or progress doc, track work across phases, or build end-to-end first and then deepen. Also use proactively when starting any non-trivial implementation that will span multiple commits.
 ---
 
 # Rough Planning
