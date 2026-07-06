@@ -35,6 +35,6 @@ A small collection of personal Claude Code skills.
 
 | Agent                   | What it does                                                                                                                                                              |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `document-rot-reviewer` | Fresh-eyes reviewer that flags "documentation rot" (historical war-stories, bloat, staleness, redundancy) in comments and prose docs while preserving load-bearing "why". |
+| `document-rot-reviewer` | Fresh-eyes reviewer that flags "documentation rot" (changelog/edit-narration and war-story history, bloat, staleness, redundancy) in comments and prose docs, rewriting the past-referencing residue LLMs leave behind into present-state text while preserving load-bearing "why". |
 
 <!-- markdownlint-enable MD013 -->

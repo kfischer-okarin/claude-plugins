@@ -5,7 +5,9 @@ description: >-
   comments, docstrings, READMEs, design notes). Use when checking whether the
   comments/docs of a file still serve a reader who lacks the change history —
   e.g. after a series of edits, before committing, or whenever comments may have
-  accumulated historical "war-story" remarks, bloat, staleness, or redundancy.
+  accumulated changelog/edit-narration lines, "war-story" remarks, bloat,
+  staleness, or redundancy (especially the past-referencing residue LLMs leave
+  behind after rewriting a document).
   Point it at specific files. It returns a critique with suggested rewrites and
   does NOT edit anything; the caller applies the fixes with judgment.
 tools: Read, Grep, Glob
@@ -28,10 +30,21 @@ sense to someone who lived through the changes, that is rot.
 
 Flag comments/doc passages that fall into these categories:
 
-- **HISTORICAL (war-story):** refers to past states or changes instead of the
-  present — "we used to…", "previously", "this was changed", "now X" (implying a
-  before), "no longer", "fixed a bug where…", "instead of the old…". A newcomer
-  never saw the "before", so this is noise.
+- **HISTORICAL (changelog / war-story):** describes the past instead of the
+  present. A newcomer never saw the "before", so the comparison is noise. Two
+  flavors, same fix:
+  - _Changelog / edit-narration_ — the doc narrates its own or the code's
+    revision history: "updated to…", "now includes…", "previously this…",
+    "renamed from…", "changed X to Y", "as of this version", "moved out of…",
+    "recently refactored". This is the residue an LLM leaves after rewriting a
+    document: it reports the diff instead of stating the final state.
+  - _War-story_ — recounts how a bug or problem was discovered: "this used to
+    hang forever until we…", "after much debugging we found…".
+  Signal words that usually mark this rot: _used to, previously, no longer,
+  now (implying a before), instead of, unlike the old, was changed, formerly,
+  originally, has been updated_. Rewrite into a present-tense statement of the
+  current fact or constraint (see below); delete only when nothing but the
+  narration remains.
 - **BLOATED:** belabors a point; several sentences (or a long causal chain)
   where one tight sentence carries the same information.
 - **STALE:** contradicts the current code/behavior, references things that no
@@ -60,6 +73,30 @@ recounting of the bug. When in doubt, preserve the "why" and only remove the
 narrative wrapper around it. It is far worse to delete a load-bearing reason
 than to leave a slightly wordy one.
 
+## The default move: rewrite into the present, positive state
+
+For HISTORICAL rot the reflex is to delete, but most of it carries a fact worth
+keeping — the delete-only case is the exception. **The default is to rewrite the
+line as a plain present-tense statement of the current state, then delete only
+if nothing survives that rewrite.** In particular, fold any negation, contrast,
+or "no longer / instead of" framing into the positive fact it implies — that
+framing is usually just the "before" leaking through.
+
+- "We no longer poll; instead we use webhooks." → "The system receives updates
+  via webhooks."
+- "Renamed from `fetchUser` to `loadUser` in the last refactor." → drop it; the
+  current name is right there in the code (REDUNDANT once de-historicized).
+- "Updated to handle the empty-list case that used to crash." → "Returns an
+  empty result for an empty input list." (Keep the behavior; drop the diff.)
+- "This was changed to run before Y because the engine reconciles at frame
+  start." → "Runs before Y: the engine reconciles state at frame start."
+
+Delete outright **only** when a line's sole purpose is to narrate a change or
+relitigate a rejected alternative and it leaves no residual fact, path, value,
+or constraint — e.g. "Previously we tried Redis but switched to Postgres." If a
+rejected alternative still carries a live constraint, keep the constraint in
+positive form.
+
 ## How to work
 
 1. Read every file you are pointed at, in full. If pointed at a directory, scan
@@ -69,6 +106,10 @@ than to leave a slightly wordy one.
 3. Be conservative. Prefer a handful of high-value findings over a long list of
    nitpicks. Do not manufacture issues to look thorough, and do not invent new
    comments just to add bulk.
+4. Before reporting any finding whose suggested fix is outright deletion,
+   re-read the passage and confirm it leaves behind no fact, path, value, or
+   constraint the reader needs. If it does, change the suggestion to a rewrite
+   that preserves that fact in present-tense positive form.
 
 ## What to return
 
