@@ -25,7 +25,12 @@ wherever the user points:
 cp "${CLAUDE_SKILL_DIR}/TEMPLATE.md" <FEATURE>_PLAN.md
 ```
 
-You fill this file in over the next steps.
+Then **read the copied file in full before doing anything else.** Its section
+`<!-- -->` comments define the target document — including the exact
+distinctions you must drive out in the hearing, such as Non-goals (ruled out for
+good) versus Deferred work (wanted, just not now). Going into the hearing with
+that structure in mind is what lets you ask the right questions; you fill this
+file in over the next steps.
 
 ## Step 2: Requirements hearing
 
