@@ -6,11 +6,9 @@ disable-model-invocation: true
 
 # Write Handoff Spec
 
-Produce a spec for an autonomous implementation session. The goal is to combine
-"short enough to approve in one read" with "all guardrails, constraints, and
-verification conditions stated explicitly". Do not over-specify the how — the
-reader is the implementing Claude session, and explicitly marking where it is
-free to decide is part of the spec.
+Produce a spec for an autonomous implementation session: all guardrails,
+constraints, and verification conditions stated explicitly, everything else
+deliberately left to the implementer's judgment.
 
 ## Process
 
@@ -30,6 +28,9 @@ free to decide is part of the spec.
   task-specific or missing. When a durable repo preference surfaces that the
   repo doesn't record yet, add capturing it there to the change surface
   instead of restating it in future specs.
+- Check whether the repo has a convention for where specs live. If not,
+  default to `HANDOFF-SPEC.md` at the repo root, deleted before merge — don't
+  ask.
 
 ### 2. Ask only about real decision points, via AskUserQuestion
 
@@ -46,12 +47,11 @@ free to decide is part of the spec.
 ### 3. Draft → refine → save
 
 - Before presenting, re-read each requirement asking "do I mean this
-  exactly?" — precise wording is honored precisely and suspends the
-  implementer's judgment at that spot. Rewrite mechanism-phrased requirements
-  into the intent behind them unless the mechanism is the point (then say
-  so), and mark illustrations as examples.
-- Present the full spec draft in the conversation, along with the remaining
-  small open points (1–3).
+  exactly?" Rewrite mechanism-phrased requirements into the intent behind
+  them unless the mechanism is the point (then say so), and mark
+  illustrations as examples.
+- Present the full spec draft in the conversation, along with any remaining
+  open points.
 - Incorporate feedback and save to the location the user specifies.
 
 ## Spec structure
@@ -106,11 +106,9 @@ showed a real mismatch. Keep it to 3–6 one-liners.
   review feedback asks for less far more often than more.
 - Don't add abstractions, defensive handling, or polish beyond what the
   spec requires; do the simplest thing that works well.
-- Use your judgment to delegate self-contained subtasks (mechanical fan-out
-  edits, test-file adaptation, doc updates) to cheaper subagent models
-  (e.g. Sonnet or Opus); keep the central, highest-judgment work in your
-  own context and verify delegated output against the spec before
-  integrating.
+- Delegate self-contained subtasks to cheaper/faster subagent models; keep
+  the highest-judgment work in your own context and verify delegated output
+  against the spec before integrating.
 - Before delivering, have a fresh-context subagent review the full diff
   against this spec and the repo's conventions.
 - If the spec's assumptions turn out to be wrong (not merely
@@ -126,16 +124,13 @@ showed a real mismatch. Keep it to 3–6 one-liners.
 ## Quality bar
 
 - 1–2 pages; the user can approve it in a single read.
+- A section that is one line or "none" is a sign of a tight spec, not an
+  incomplete one — never pad a section to make it look considered.
 - Precision displaces judgment: anything stated exactly is done exactly, so
   spend exact wording only on true guardrails and state intent everywhere
   else, so judgment has a target. Wording meant as a sketch must be marked
   as an example or moved to "Left open".
 - Each requirement is a checkable *what* plus constraints. Specify *how* only
   where needed to avoid a known pitfall.
-- "Left open" records deliberate non-decisions, so the reader can tell
-  considered-and-delegated apart from overlooked. It is not a catalog of
-  freedoms.
-- The user's manual work (e.g. deleting secrets) and verification deferred to
-  post-merge CI are written as "include in the completion report" contracts.
 - End state: the handoff is just "read `<file>` and implement autonomously", and
   the session can run to completion without mid-task questions.
