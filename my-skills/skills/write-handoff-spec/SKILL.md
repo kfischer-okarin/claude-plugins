@@ -38,7 +38,7 @@ the time for that.
 
 Make sure to know enough about the problem that the user would not be
 dissatisfied. Trust that the implementer will be smart enough to interpret the
-this spec and find out the details during implementation.
+spec and find out the details during implementation.
 
 ### 2. Write the spec
 
@@ -46,10 +46,10 @@ It should be short enough that the user can easily review it but contain enough
 detail to get across all important requirements of the task at hand.
 
 You are free to format the spec as you like and just store it in the repository
-root as `<FEATURE_NAME>_SPEC.md`. Just make sure that the implementor has a
+root as `<FEATURE_NAME>_SPEC.md`. Just make sure that the implementer has a
 clear (preferably test-driven) way to know they are done.
 
-The final goal should be that you can just hand the implementor the spec and
+The final goal should be that you can just hand the implementer the spec and
 tell them to go and implement it and that together with the repository contents
 and their own judgement will be enough to produce a result that the user will be
 very satisfied with.
