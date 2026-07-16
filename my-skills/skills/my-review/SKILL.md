@@ -38,5 +38,5 @@ The skill takes an optional argument: a pull request reference (a PR number,
        headRefOid,url`.
      - Post with `gh api repos/{owner}/{repo}/pulls/{n}/comments` using
        `commit_id` (the head SHA), `path`, `line`, and `side=RIGHT`.
-     - Comments post under the user's own GitHub account, so begin each comment
-       body by clarifying that Claude wrote it on the user's behalf.
+     - Begin each comment body with the fixed header line
+       `🤖 Review comment by Claude Code`, followed by the finding.
