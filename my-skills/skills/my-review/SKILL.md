@@ -16,7 +16,8 @@ The skill takes an optional argument: a pull request reference (a PR number,
 
 2. Run the built-in `code-review` skill with the `high` argument. By default,
    assume the review target is the currently checked-out branch's diff against
-   the default branch.
+   the default branch. If you cannot execute the skill yourself, ask the user
+   to call it for you.
 
 3. Always present the findings in the conversation, ranked most-severe first —
    for each give a short label, the `file:line`, and enough detail to decide
