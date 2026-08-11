@@ -28,6 +28,7 @@ A small collection of personal Claude Code skills.
 | `my-review`             | Review the current changes using any local repo review guidelines, then run the built-in `code-review` skill at high effort and save the result. |
 | `check-review-comments` | Fetch review comments on the current PR from GitHub and triage each on importance vs. effort.                                                    |
 | `write-handoff-spec`    | Interview you about a task, then produce a minimal-but-explicit spec that a later autonomous session can implement unattended.                   |
+| `software-design`       | Personal software design principles and taste — tests as executable specification, domain/application layering, seam placement, module design.   |
 
 <!-- markdownlint-enable MD013 -->
 
