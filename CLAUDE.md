@@ -22,3 +22,8 @@ existing files in this repo as the source of truth.
 Whenever you add, remove, or rename a plugin component (skill, agent, hook,
 etc.), update `README.md` to match — the per-plugin component tables there are
 the user-facing list and must stay accurate.
+
+The table entries describe in one short sentence what a component is or does.
+Do not copy trigger phrasing ("use when…", "ALWAYS load…") from the skill
+description into them — triggering lives in the frontmatter, the README
+addresses a human browsing the collection.
