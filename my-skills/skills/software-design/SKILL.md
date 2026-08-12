@@ -9,6 +9,12 @@ The design principles and preferences that make up good — easy to understand
 and easy to change — software design in Kevin Fischer's eyes. These are
 personal preferences: a description of his taste.
 
+The core conviction: a test suite that doubles as a human-readable
+specification of the system brings you halfway to an elegant and
+maintainable system. The other half is correctly distinguishing essential
+from accidental complexity — keeping the two separated in the source code,
+and treating each with the distinct tactics it needs.
+
 ## Tests Are a Human-Readable Executable Specification
 
 The test suite is a comprehensible, minimal, focused document about the
@@ -87,25 +93,38 @@ connects it to the real world: adapters that talk to the external systems,
 and the setup code that wires them into the core before the domain logic
 takes over — a main function, a web framework's request handling, whatever
 the runtime offers. That setup code is allowed to stay plain, unclean and
-untested.
+untested — it holds no logic of its own, and its failures are loud and
+immediate at startup.
 
 - Inject into the core only what is hard to control — processes, network,
   filesystem, clock, randomness — or what serves as a sensor for side
   effects the tests need to observe.
-- A seam is a **minimal facade**: the smallest interface covering the actual
-  use cases at hand, never a general-purpose wrapper around the external
-  system.
 - A seam is only warranted for a capability the core needs on-demand, in the
   middle of its work. Often the use case can instead be expressed as a
   function of domain data, with the external system reduced to a
-  communication mechanism: its I/O happens at initialization or at the
-  request boundary, the edge acquires and delivers, and the core needs no
+  communication mechanism. Its I/O then happens at initialization or at the
+  request boundary: the edge acquires and delivers, and the core needs no
   seam because it has no dependency — only inputs.
+- A seam is a **minimal facade**: the smallest interface covering the actual
+  use cases at hand, never a general-purpose wrapper around the external
+  system.
+- By default a seam sits at the external system's outermost physical
+  boundary. A fake must replicate as little domain behavior as possible, so
+  that it stays simple and obvious to produce.
+- A seam may move inward when reality proves the simpler surface: when the
+  application turns out to use the external API through a few argument
+  patterns that map simply — without complex logic — onto a domain-fitting
+  adapter, the facade can extend up to the simplest parametrizable surface
+  that fulfills the application's needs completely, as long as it still is
+  an interface to the real world. When unsure, default to the unflavored
+  external system; widening and simplifying the adapter later is easy.
 - The real adapter behind a seam still gets a contact test proving it
   actually touches the real world correctly.
 - Interfaces can and should be shaped freely for testability — first and
   foremost via dependency injection — but domain logic and data structures
-  never are.
+  never are. Interfaces are ergonomics: how domain data and rules are made
+  manipulable, free to bend. The domain model is essence: the reality worked
+  out and specified, and it must not change just because it is hard to test.
 
 Influences:
 
@@ -130,10 +149,10 @@ with a `bark_sound` parameter serves better than an `Animal` hierarchy.
 A construct chosen this way ends up perfectly fitted to its particular use.
 
 Related ideas at neighboring design resolutions: the Transformation Priority
-Premise (Robert C. Martin) below, on transforming low-level code constructs
-from specific to generic; the principle of least expressiveness (Concepts,
-Techniques, and Models of Computer Programming) above, on choosing between
-whole computation models.
+Premise (Robert C. Martin) at the finer resolution of transforming
+individual code constructs from specific to generic; the principle of least
+expressiveness (Concepts, Techniques, and Models of Computer Programming) at
+the coarser resolution of choosing between whole computation models.
 
 ## Conceptual DRY, Not Structural DRY
 
@@ -153,8 +172,7 @@ shapes.
 
 ## Context Guides
 
-Architecture and testing patterns per kind of system, as experience proves
-them:
+Architecture and testing patterns per kind of system:
 
 - [references/clis.md](references/clis.md) — command-line tools
 - [references/daemons.md](references/daemons.md) — daemons and background

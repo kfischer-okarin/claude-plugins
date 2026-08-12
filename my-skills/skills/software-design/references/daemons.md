@@ -13,8 +13,5 @@ centerpiece.
   `tick` directly.
 - **Time enters as an argument.** `tick(now=...)` keeps the whole behavior a
   function of the clock, so tests state moments instead of stubbing time.
-- **Seams for external systems** follow the CLI rules: outermost physical
-  boundary by default, moved inward to a simpler domain-fitting surface when
-  reality proves the mapping stays trivial.
 
 Argument and config parsing follow the CLI corollaries unchanged.
