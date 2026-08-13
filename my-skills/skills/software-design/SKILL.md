@@ -97,8 +97,14 @@ untested — it holds no logic of its own, and its failures are loud and
 immediate at startup.
 
 - Inject into the core only what is hard to control — processes, network,
-  filesystem, clock, randomness — or what serves as a sensor for side
-  effects the tests need to observe.
+  clock, randomness — or what serves as a sensor for side effects the tests
+  need to observe.
+- The filesystem usually is not one of these: with temp directories, real
+  files are deterministic, hermetic and fast, and the semantics that
+  actually bite — modification times, atomic replacement, permissions —
+  exist only in the real thing. Pass paths as inputs and let tests write real files; a
+  filesystem fake is a late optimization for a suite whose I/O dominates its
+  runtime, or for failures reality won't produce on demand.
 - A seam is only warranted for a capability the core needs on-demand, in the
   middle of its work. Often the use case can instead be expressed as a
   function of domain data, with the external system reduced to a

@@ -11,9 +11,9 @@ from in most cases, not a law.
   directly as methods. This is the seam where the system's behavior is
   comprehensively tested.
 - **Seams follow the general rules of the main document.** For a CLI the
-  usual external systems are time, filesystem and subprocesses; the fake by
-  default replaces the raw filesystem, not a higher-level "config storage"
-  built on top of it.
+  usual hard-to-control dependencies are time and subprocesses. The files a
+  tool reads and writes enter as paths, and tests exercise them as real
+  files in temp directories.
 
 ## Implementation Corollaries
 
