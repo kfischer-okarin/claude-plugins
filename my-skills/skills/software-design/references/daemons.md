@@ -5,7 +5,7 @@ centerpiece.
 
 ## Architecture Blueprint
 
-- **A super thin main layer.** It builds the application object and runs the
+- **A super thin main layer.** It wires up the application and runs the
   forever loop. The loop itself — while true: tick, sleep — stays in the
   untested main layer.
 - **The centerpiece is a `tick` method** representing one iteration of that
