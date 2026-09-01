@@ -29,13 +29,6 @@ A small collection of personal Claude Code skills.
 | `check-review-comments` | Fetch review comments on the current PR from GitHub and triage each on importance vs. effort.                                                    |
 | `write-handoff-spec`    | Interview you about a task, then produce a minimal-but-explicit spec that a later autonomous session can implement unattended.                   |
 | `software-design`       | Personal software design principles and taste — tests as executable specification, domain/application layering, seam placement, module design.   |
-
-<!-- markdownlint-enable MD013 -->
-
-<!-- markdownlint-disable MD013 -->
-
-| Agent                   | What it does                                                                                                                                                              |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `document-rot-reviewer` | Fresh-eyes reviewer that flags "documentation rot" (changelog/edit-narration and war-story history, bloat, staleness, redundancy) in comments and prose docs, rewriting the past-referencing residue LLMs leave behind into present-state text while preserving load-bearing "why". |
+| `doc-review`            | Review a document with three fresh-eyes subagents — contradictions, redundancy (DRY), and meta bleed — and report merged findings.               |
 
 <!-- markdownlint-enable MD013 -->
