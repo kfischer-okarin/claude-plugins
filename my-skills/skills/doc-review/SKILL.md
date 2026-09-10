@@ -1,6 +1,6 @@
 ---
 name: doc-review
-description: Review a document with three fresh-eyes subagents — contradictions, redundancy (DRY), and meta bleed. Reports findings only; the caller applies fixes with judgment.
+description: Review one or more documents with four fresh-eyes subagents — contradictions, redundancy (DRY), meta bleed, and evolution bleed. Reports findings only; the caller applies fixes with judgment.
 disable-model-invocation: true
 ---
 
@@ -75,6 +75,47 @@ those are the subject matter. For each finding: quote the passage, categorize
 it, explain in one sentence why it is meta, suggest the minimal fix, and rate
 it clear vs. borderline.
 
+## 4. Evolution-bleed auditor
+
+Find passages that mention how the subject used to be. This is the
+characteristic residue of a document an LLM revised: the model holds the
+pre-edit and post-edit state in mind at once and writes the difference into
+the text — sometimes justifying the change, sometimes showing its work — while
+the reader arrives knowing only the current state and cannot supply the
+comparison being drawn. Expect it to be dense in any document an agent edited.
+
+**Any appearance of a superseded state is a finding**, including where the
+current state is described alongside it. The reader is not weighing the two,
+so the current state has to carry the passage by itself. Shapes to look for:
+
+- The subject introduced as the absence of an earlier version: "no longer X",
+  "does not X", "nothing is X".
+- Reasoning that only works as a rebuttal: it answers an objection the reader
+  has not raised, or argues against an approach this document never described.
+- Reassuring emphasis — "deliberately", "intentionally", "on purpose" —
+  defending a choice the reader has no reason to doubt.
+- An account of what changed, why it changed, or what the old way cost.
+
+Where the documents sit in a git repository, the earlier version is evidence:
+`git diff` for edits still in the working tree, `git log -p` for recent
+commits. A sentence that arrived in the same edit that deleted what it alludes
+to is as clear as this gets. Use it as a lead rather than the test: bleed that
+survived a few commits no longer shows in a recent diff, and a passage stands
+as a finding on its own terms whether or not a diff explains where it came
+from.
+
+Two kinds of document exist to record change, and there the superseded state
+is the subject matter: migration notes, addressed to someone who knows the old
+way, and changelogs or deprecation markers, which report history as fact rather
+than argue with it. Otherwise the exceptions are narrow — an approach the
+target reader would arrive at unprompted, which earns being ruled out
+explicitly; contrast with a live alternative the reader is about to meet; and
+constraints that are negative in substance ("requires no network access").
+
+The baseline is a plain positive statement of the current approach, carrying
+only the reasons that hold for someone who never saw another one. For each
+finding: quote the passage, give the positive statement it should become, and
+rate it clear vs. borderline.
 
 ## Presenting the results
 
