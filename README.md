@@ -30,5 +30,6 @@ A small collection of personal Claude Code skills.
 | `write-handoff-spec`    | Interview you about a task, then produce a minimal-but-explicit spec that a later autonomous session can implement unattended.                    |
 | `software-design`       | Personal software design principles and taste — tests as executable specification, domain/application layering, seam placement, module design.    |
 | `doc-review`            | Review documents with four fresh-eyes subagents — contradictions, redundancy (DRY), meta bleed, and evolution bleed — and report merged findings. |
+| `writing-agent-prompts` | Principles, structure and a review workflow for writing the instruction documents agents read — skills, CLAUDE.md files, system prompts.         |
 
 <!-- markdownlint-enable MD013 -->
