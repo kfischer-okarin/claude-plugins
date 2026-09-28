@@ -24,8 +24,8 @@ the exact nature of that request including questions like:
 - Are there external constraints to the possible implementation methods?
 - Does the user have preferences about the implementation method?
 
-For this you will need to do an in-depth interview with the user using the
-`AskUserQuestion` tool. To be able to ask meaningful questions you need to find
+For this you will need to do an in-depth interview with the user (with the
+`grill-me` skill if it is available). To be able to ask meaningful questions you need to find
 out the current state of the project so explore the codebase and documentation
 until you think you have a good enough idea of all parts that are relevant to
 the request. Then conduct the interview. 

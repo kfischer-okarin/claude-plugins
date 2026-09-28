@@ -34,8 +34,8 @@ file in over the next steps.
 
 ## Step 2: Requirements hearing
 
-Before writing the plan, conduct an in-depth interview to drive out ambiguity.
-Use the `AskUserQuestion` tool to explore:
+Before writing the plan, conduct an in-depth interview to drive out ambiguity
+(with the `grill-me` skill if it is available). Explore:
 
 - **The use case** — what is actually wanted, and why. Surface the goal and the
   background, not just the surface request.
