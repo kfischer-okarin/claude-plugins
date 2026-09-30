@@ -156,6 +156,9 @@ following the principles in this skill.
   - Collectively Exhaustive: together, the sections specify all aspects of
     behavior the Author cares about.
 - Within each section, general Statements come first and special cases later.
+- Canonical section names and terms in other languages, so Prompts share one
+  vocabulary regardless of repository:
+  - Japanese: Background → 背景, Behavior → 進め方, Output → 出力, Job → 仕事
 - Depending on the type of Prompt some sections or topics might not be
   applicable, for example instructions for general purpose agents (like
   CLAUDE.md documents) probably do not need a Job description, or some skills
