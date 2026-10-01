@@ -31,5 +31,6 @@ A small collection of personal Claude Code skills.
 | `software-design`       | Personal software design principles and taste — tests as executable specification, domain/application layering, seam placement, module design.    |
 | `doc-review`            | Review documents with four fresh-eyes subagents — contradictions, redundancy (DRY), meta bleed, and evolution bleed — and report merged findings. |
 | `writing-agent-prompts` | Principles, structure and a review workflow for writing the instruction documents agents read — skills, CLAUDE.md files, system prompts.         |
+| `design-record`         | Turn a stretch of work's requirements and settled design decisions into a numbered design record, reviewed with you before it is final.           |
 
 <!-- markdownlint-enable MD013 -->
