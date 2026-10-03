@@ -107,13 +107,13 @@ updated_at: YYYY-MM-DD
 
 ### RNNN.1 — <The requirement in EARS form>
 
-<A short explanation, unless the heading is self-explanatory.>
+<The user's reason or context, if they gave one.>
 
 ## Decisions
 
 ### DNNN.1 — <The decision, stated concisely>
 
-<Details, then the reasoning.>
+<Details, then the reasoning, unless the heading says it all.>
 ```
 
 - `NNN` is the record's number. Entries refer to each other, and to entries of
