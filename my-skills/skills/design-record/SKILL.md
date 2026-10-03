@@ -118,8 +118,8 @@ updated_at: YYYY-MM-DD
 
 - `NNN` is the record's number. Entries refer to each other, and to entries of
   earlier records, by these IDs.
-- `updated_at` is the latest day a decision in the record was settled; for one
-  of the agent's choices, the day the user confirmed or changed it.
+- `updated_at` is the date of the session that wrote the record, or that last
+  extended it.
 
 ### Requirements
 
