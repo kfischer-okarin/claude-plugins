@@ -177,7 +177,8 @@ are:
 
 #### Behavior Section
 
-Contains instructions about how the Agent should do the Job. Common topics are:
+Contains instructions, phrased in the imperative, about how the Agent should do
+the Job. Common topics are:
 
 - Where the End User enters the Job: how proactive the Agent should be vs
   seeking to clarify, and which decisions it never takes alone
