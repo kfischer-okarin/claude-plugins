@@ -51,15 +51,15 @@ one of the following:
    `docs/design/NNN-<slug>.md` if it has no convention. Extend the latest
    record instead only when the user says this session continues the latest
    record's stretch of work.
-   - Mark every choice the agent made on its own with *(agent's choice)*, so
-     the user can confirm or change each one in step 2.
-   - Only what the user explicitly settled or agreed to in the conversation is
-     a user decision. Whatever the agent filled in to make the design concrete
-     is a separate decision, one of the agent's choices.
-   - If code was written, a decision below the level described in What
-     Decisions Belong in the Design Record that is localized to one place in
-     the code becomes a short comment there instead of an entry, when it would
-     not be obvious to a reader familiar with the language and framework.
+   - Mark every choice the agent made on its own with *(agent's choice)*, so the
+     user can confirm or change each one in step 2.
+   - Count as a user decision only what the user explicitly settled or agreed to
+     in the conversation. Record whatever the agent filled in to make the design
+     concrete as a separate decision, one of the agent's choices.
+   - If code was written, turn a decision below the level described in What
+     Decisions Belong in the Design Record that is localized to one place in the
+     code into a short comment there instead of an entry, when it would not be
+     obvious to a reader familiar with the language and framework.
 2. Iterate with the user on the draft until they approve it, reviewing its
    content and confirming or changing each *(agent's choice)*. Choices the
    agent made on its own become decisions once the user confirms or changes
@@ -72,7 +72,7 @@ one of the following:
 
 ### After the record is written
 
-The record stays loaded for the rest of the session. When a later change in the
+Keep the record in mind for the rest of the session. When a later change in the
 same session settles or reverses a decision, propose updating the record
 accordingly.
 
