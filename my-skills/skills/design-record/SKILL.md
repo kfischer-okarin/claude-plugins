@@ -70,6 +70,19 @@ the following:
    design records yet, offer to add a pointer to them and a rule to keep them up
    to date, so later work maintains them.
 
+### Requirements versus decisions
+
+When you are not sure whether something the user said is a requirement or a
+decision, follow this rule:
+
+- If it is something the user definitely wants, or needs because of a
+  constraint, so that it is non-negotiable, it is a requirement: the *what*.
+- If it could have been settled another way without dropping a requirement, it
+  is a decision: *how* a requirement is met, or what is in or out of scope.
+  - If a requirement was already stated at the level of a technical decision and
+    there was never any other realistic choice, leave that decision out of the
+    record, and mention it as dropped when presenting the draft.
+
 ### After the record is written
 
 Keep the record in mind for the rest of the session. When a later change in the
