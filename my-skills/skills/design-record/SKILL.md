@@ -13,8 +13,8 @@ disable-model-invocation: true
 A design record keeps what was settled in a stretch of work — what the user
 asked for, what was ruled out, and why — for whoever works on the project later,
 human or agent, without having been in the conversation. It is good when such a
-reader can tell what the user wanted, how each wish was met, what is
-deliberately out of scope, and why.
+reader can tell what the user wanted, what was decided, what is deliberately out
+of scope, and why.
 
 The skill is invoked at the end of a stretch of work, so its conversation is the
 source of the record.
