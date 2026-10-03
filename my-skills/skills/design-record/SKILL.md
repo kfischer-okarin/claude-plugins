@@ -46,13 +46,16 @@ the following:
 
 ### Workflow
 
-1. Draft a new record from the session's requirements and decisions, numbered
+1. Find the decisions in earlier records that the session's decisions relate
+   to, so the draft can refer to them; unless you already looked them up during
+   the design, send a subagent for this.
+2. Draft a new record from the session's requirements and decisions, numbered
    after the existing ones, where the project keeps design documents, or in
    `docs/design/NNN-<slug>.md` if it has no convention. Extend the latest record
    instead only when the user says this session continues the latest record's
    stretch of work.
    - Mark every choice the agent made on its own with *(agent's choice)*, so the
-     user can confirm or change each one in step 2.
+     user can confirm or change each one in step 3.
    - Count as a user decision only what the user explicitly settled or agreed to
      in the conversation. Record whatever the agent filled in to make the design
      concrete as a separate decision, one of the agent's choices.
@@ -60,12 +63,10 @@ the following:
      Decisions Belong in the Design Record that is localized to one place in the
      code into a short comment there instead of an entry, when it would not be
      obvious to a reader familiar with the language and framework.
-2. Iterate with the user on the draft until they approve it, reviewing its
+3. Iterate with the user on the draft until they approve it, reviewing its
    content and confirming or changing each *(agent's choice)*. Choices the agent
    made on its own become decisions once the user confirms or changes them; the
    approved record drops the marks.
-3. Send a subagent to find decisions in earlier records that the approved ones
-   relate to, and relate them in the record (see Decisions).
 4. If the project's agent instructions (e.g. CLAUDE.md) do not mention the
    design records yet, offer to add a pointer to them and a rule to keep them up
    to date, so later work maintains them.
@@ -141,5 +142,3 @@ updated_at: YYYY-MM-DD
   belong here, and so do the alternatives not chosen where they matter.
 - Who suggested an option is irrelevant: the entry records the choice and its
   reasoning only.
-- A decision that reverses one from an earlier record is recorded here, naming
-  the record and decision it replaces.
