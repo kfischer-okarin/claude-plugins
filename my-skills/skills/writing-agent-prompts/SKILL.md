@@ -97,6 +97,8 @@ following the principles in this skill.
 - When several Statements each guard against one specific case, look for the
   single general Statement that covers them all and propose it to the Author as
   a replacement.
+- When changing a Statement, state only the new behavior: the Agent never saw
+  the old one, so a Statement ruling it out only adds noise.
 - For a large edit, or for migrating an unstructured prompt into this format,
   follow [Migrating a Prompt](migrating-a-prompt.md).
 
