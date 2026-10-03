@@ -80,8 +80,8 @@ decision, follow this rule:
 - If it could have been settled another way without dropping a requirement, it
   is a decision: *how* a requirement is met, or what is in or out of scope.
   - If a requirement was already stated at the level of a technical decision and
-    there was never any other realistic choice, leave that decision out of the
-    record, and mention it as dropped when presenting the draft.
+    there was never any other realistic choice, keep the requirement and omit
+    the decision; list omitted decisions when you show the draft.
 
 ### After the record is written
 
