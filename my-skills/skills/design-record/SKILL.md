@@ -88,7 +88,8 @@ decision, follow this rule:
 
 Keep the record in mind for the rest of the session. When a later change in the
 same session settles or reverses a decision, propose updating the record
-accordingly.
+accordingly: rewrite the affected entry in place, keeping the dropped option in
+its reasoning where it matters.
 
 ## Output
 
