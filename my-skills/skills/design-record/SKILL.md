@@ -1,6 +1,6 @@
 ---
 name: design-record
-description: Extract the requirements and settled design decisions of the current session's work — a design interview such as grill-me, or an unstructured conversation — into a design record document, and keep it in step with the rest of the session.
+description: Extract the requirements and settled design decisions of the current session's work into a design record document.
 disable-model-invocation: true
 ---
 
