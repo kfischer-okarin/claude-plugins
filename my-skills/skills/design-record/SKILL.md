@@ -11,20 +11,20 @@ disable-model-invocation: true
 ### Purpose
 
 A design record keeps what was settled in a stretch of work — what the user
-asked for, what was ruled out, and why — for whoever works on the project
-later, human or agent, without having been in the conversation. It is good when such a reader
-can tell what the user wanted, how each wish was met, what is deliberately out
-of scope, and why.
+asked for, what was ruled out, and why — for whoever works on the project later,
+human or agent, without having been in the conversation. It is good when such a
+reader can tell what the user wanted, how each wish was met, what is
+deliberately out of scope, and why.
 
 The skill is invoked at the end of a stretch of work, so its conversation is the
 source of the record.
 
 ### What Decisions Belong in the Design Record
 
-Those made at the level of the system rather than of a single piece of code:
-the kind a design review would discuss and a code review would not. A later
-reader cannot recover them from any one place in the code. Typically they shape
-one of the following:
+Those made at the level of the system rather than of a single piece of code: the
+kind a design review would discuss and a code review would not. A later reader
+cannot recover them from any one place in the code. Typically they shape one of
+the following:
 
 - the architecture
 - technology selection
@@ -48,9 +48,9 @@ one of the following:
 
 1. Draft a new record from the session's requirements and decisions, numbered
    after the existing ones, where the project keeps design documents, or in
-   `docs/design/NNN-<slug>.md` if it has no convention. Extend the latest
-   record instead only when the user says this session continues the latest
-   record's stretch of work.
+   `docs/design/NNN-<slug>.md` if it has no convention. Extend the latest record
+   instead only when the user says this session continues the latest record's
+   stretch of work.
    - Mark every choice the agent made on its own with *(agent's choice)*, so the
      user can confirm or change each one in step 2.
    - Count as a user decision only what the user explicitly settled or agreed to
@@ -61,9 +61,9 @@ one of the following:
      code into a short comment there instead of an entry, when it would not be
      obvious to a reader familiar with the language and framework.
 2. Iterate with the user on the draft until they approve it, reviewing its
-   content and confirming or changing each *(agent's choice)*. Choices the
-   agent made on its own become decisions once the user confirms or changes
-   them; the approved record drops the marks.
+   content and confirming or changing each *(agent's choice)*. Choices the agent
+   made on its own become decisions once the user confirms or changes them; the
+   approved record drops the marks.
 3. Send a subagent to find decisions in earlier records that the approved ones
    relate to, and relate them in the record (see Decisions).
 4. If the project's agent instructions (e.g. CLAUDE.md) do not mention the
