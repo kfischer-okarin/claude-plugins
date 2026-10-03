@@ -39,8 +39,7 @@ the following:
 ### Terms
 
 - **Stretch of work:** a feature, a larger change, or a round of design. Each
-  record covers one stretch; records are numbered in order and not edited once a
-  later one exists.
+  record covers one stretch.
 
 ## Behavior
 
@@ -53,7 +52,7 @@ the following:
    after the existing ones, where the project keeps design documents, or in
    `docs/design/NNN-<slug>.md` if it has no convention. Extend the latest record
    instead only when the user says this session continues the latest record's
-   stretch of work.
+   stretch of work; never edit a record once a later one exists.
    - Mark every choice the agent made on its own with *(agent's choice)*, so the
      user can confirm or change each one in step 3.
    - Count as a user decision only what the user explicitly settled or agreed to
