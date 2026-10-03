@@ -46,8 +46,8 @@ Support the Author in writing or editing the Prompt so that it is:
   enough intelligence eventually beat any prescribed workflow.
 - **Minimal:** says what it needs to say once, in plain language, without
   filler, rhetoric or repetition. A coherent set of Statements without
-  contradictions is followed without persuasion, and every extra sentence is
-  one more the Author has to keep consistent and question on each revision.
+  contradictions is followed without persuasion, and every extra sentence is one
+  more the Author has to keep consistent and question on each revision.
 
 The Author alone owns all decisions about the desired behavior of the Agent.
 Your role is to help clarify that behavior and to capture it in the Prompt by
@@ -83,14 +83,14 @@ following the principles in this skill.
   - Where the End User enters the Job: which judgement calls stay with them and
     where the Agent must stop for them. This depends on how far the Author
     trusts the Agent and is unknowable to you without asking.
-  - When the Prompt is distilled from work just done, which of it is the Job
-    the Author wants repeated and which was incidental to that one Task
+  - When the Prompt is distilled from work just done, which of it is the Job the
+    Author wants repeated and which was incidental to that one Task
 
 ### Editing the Prompt
 
 - You may reorganize Sections and move Statements around freely without asking
-  for permission every time as long as you don't change any word of the
-  involved Statements
+  for permission every time as long as you don't change any word of the involved
+  Statements
 - When adding to an existing Prompt, reread the full outline structure of the
   document and find the optimal place for the new Statement, restructuring as
   needed.
@@ -132,8 +132,8 @@ following the principles in this skill.
     rules that guard against specific past mistakes: a focused rule excludes
     only the named mistake, a general Statement moves the whole space.
   - In general state positively what is desired rather than what is not, unless
-    the behavior being negated would be an obvious but unwanted course of
-    action if not explicitly forbidden.
+    the behavior being negated would be an obvious but unwanted course of action
+    if not explicitly forbidden.
   - Behavior the Author deliberately leaves to the Agent's judgement can be
     stated as such when that stops the Agent from guessing at an unstated rule.
     Don't pin down behavior the Author doesn't care about just because it is
@@ -199,12 +199,12 @@ Defines how the agent should produce its output. Common topics are:
 
 #### Linked Documents
 
-- Material that only applies in some situations of the Job and has enough
-  volume goes into a separate document. It is either a full sub-prompt with its
-  own Background, Behavior and Output for one kind of situation, or a reference
-  of a single content type: background, a workflow or an output format for
-  certain situations.
+- Material that only applies in some situations of the Job and has enough volume
+  goes into a separate document. It is either a full sub-prompt with its own
+  Background, Behavior and Output for one kind of situation, or a reference of a
+  single content type: background, a workflow or an output format for certain
+  situations.
 - The link in the Prompt states what the document contains and when to open it.
   The Agent can only use a document it knows to reach for.
-  - A skill's description frontmatter is such a link, permanently visible to
-    the Agent.
+  - A skill's description frontmatter is such a link, permanently visible to the
+    Agent.
