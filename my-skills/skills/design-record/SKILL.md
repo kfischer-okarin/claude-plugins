@@ -81,74 +81,52 @@ accordingly.
 ### Document structure
 
 ```markdown
+---
+updated_at: YYYY-MM-DD
+---
+
 # NNN — <Title of the stretch of work>
 
 <One or two sentences: what this stretch of work was, and when.>
 
 ## Requirements
 
-### 1. <The requirement as a short proposition>
+### RNNN.1 — <The requirement in EARS form>
 
-*Source: <initial request | added by <user> during the conversation |
-<user>'s answer to a question about what the work should do>.*
+<A short explanation, unless the heading is self-explanatory.>
 
-#### Settled decisions
+## Decisions
 
-**YYYY-MM-DD — <Question?>**
-<Answer, then the reasoning.>
+### DNNN.1 — <The decision, stated concisely>
 
-## Open questions
-
-- <Question, with its requirement number and what is known so far>
+<Details, then the reasoning.>
 ```
 
-`<user>` is the name the project's documents and git history know the user by.
+- `NNN` is the record's number. Entries refer to each other, and to entries of
+  earlier records, by these IDs.
+- `updated_at` is the latest day a decision in the record was settled; for one
+  of the agent's choices, the day the user confirmed or changed it.
 
 ### Requirements
 
-A requirement is something the user wants the stretch of work to achieve: the
-*what*, not the solution. It comes from the user's initial request, from a
-direction the user added during the conversation, or from the user's answer to
-a question about what the work should do; its Source line says which.
-
-- Each is a short proposition phrased with "should" ("The app should …"), or
-  with "can" for a capability the user gains ("Foods can be logged without a
-  chat").
+- Each heading is phrased in EARS form with "should" and the keywords in lower
+  case: "The app should …", "When a screen loads, the app should …", "While …",
+  "If …, then …", "Where …".
 - They are listed in the order they came up in the session. Requirements named
   together, as often in the initial request, are ordered so that each concept is
   introduced before a requirement relies on it.
 
 ### Decisions
 
-A decision is a choice about *how* a requirement is met, or about what is in or
-out of scope, that the user made or confirmed during the conversation. Every
-decision belongs to the requirement that motivated it.
-
-- The list under each requirement is flat and chronological.
-- The question names the concern the choice settles, open enough that every
-  option considered answers it.
-  - It presupposes nothing that was itself a choice: "What authentication does
-    the APK download need?" rather than "Are the downloads public?", "What works
-    while offline?" rather than "Does the app queue entries while offline?".
-  - It is a complete sentence, understandable from the design record up to that
-    point without the conversation.
-- The answer to a user decision stays close to the user's own words, keeping
+- They are listed chronologically, in the order they were made.
+- The body of a user decision stays close to the user's own words, keeping
   qualifiers such as "for now".
-- The answer introduces every command, file, component or concept it creates,
-  with its purpose, for a reader who does not know the final design.
+- The body introduces every command, file, component or concept the decision
+  creates, with its purpose, for a reader who does not know the final design. A
+  data structure it settles, such as a table schema, is shown in its final form.
 - The reasoning says why this option won; constraints and facts that forced it
   belong here, and so do the alternatives not chosen where they matter.
 - Who suggested an option is irrelevant: the entry records the choice and its
   reasoning only.
-- The date is the day the decision was settled; for one of the agent's choices,
-  the day the user confirmed or changed it.
 - A decision that reverses one from an earlier record is recorded here, naming
   the record and decision it replaces.
-
-### Open questions
-
-An open question is a question about the requirements or the design that the
-user left open in the discussion, to be decided later. The agent's own ideas for
-later work are not open questions.
-
-Omit the section when there are none.
