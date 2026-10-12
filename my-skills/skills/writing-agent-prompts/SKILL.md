@@ -100,8 +100,6 @@ following the principles in this skill.
 - When several Statements each guard against one specific case, look for the
   single general Statement that covers them all and propose it to the Author as
   a replacement.
-- When changing a Statement, state only the new behavior: the Agent never saw
-  the old one, so a Statement ruling it out only adds noise.
 - Always consider the behavioral implications a prompt edit will have — the
   redundancies, contradictions or hard to judge situations it may cause — and
   inform the Author of them.
@@ -129,6 +127,9 @@ following the principles in this skill.
 - Holds in every Task of the Job. Material that only applies in some situations
   goes after the general Statements of its section if small, and into a linked
   document if large (see Linked Documents).
+- Describes the behavior as it is now, without contrasting it with an earlier
+  version of the Prompt ("no longer…", "instead of…"): the Agent never saw that
+  version, so the contrast means nothing to it.
 - Prefers, where possible, the actor as the subject and the action as a verb,
   as Williams' *Style* recommends: "restart the backend container", not "a
   backend container restart".
