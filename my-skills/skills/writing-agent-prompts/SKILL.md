@@ -123,6 +123,9 @@ following the principles in this skill.
 - Holds in every Task of the Job. Material that only applies in some situations
   goes after the general Statements of its section if small, and into a linked
   document if large (see Linked Documents).
+- Prefers, where possible, the actor as the subject and the action as a verb,
+  as Williams' *Style* recommends: "restart the backend container", not "a
+  backend container restart".
 
 ### Instructions
 
