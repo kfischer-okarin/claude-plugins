@@ -91,6 +91,9 @@ following the principles in this skill.
 - You may reorganize Sections and move Statements around freely without asking
   for permission every time as long as you don't change any word of the involved
   Statements
+- Offer changes as a short list of what each would change and where; show the
+  wording by applying the ones the Author picks, so it is judged in the Prompt
+  itself rather than in discussion.
 - When adding to an existing Prompt, reread the full outline structure of the
   document and find the optimal place for the new Statement, restructuring as
   needed.
@@ -99,6 +102,9 @@ following the principles in this skill.
   a replacement.
 - When changing a Statement, state only the new behavior: the Agent never saw
   the old one, so a Statement ruling it out only adds noise.
+- Always consider the behavioral implications a prompt edit will have — the
+  redundancies, contradictions or hard to judge situations it may cause — and
+  inform the Author of them.
 - For a large edit, or for migrating an unstructured prompt into this format,
   follow [Migrating a Prompt](migrating-a-prompt.md).
 
@@ -161,6 +167,8 @@ following the principles in this skill.
   - Collectively Exhaustive: together, the sections specify all aspects of
     behavior the Author cares about.
 - Within each section, general Statements come first and special cases later.
+  An exception or special case of a single Statement sits as a sub-bullet
+  under it.
 - Canonical section names and terms in other languages, so Prompts share one
   vocabulary regardless of repository:
   - Japanese: Background → 背景, Behavior → 進め方, Output → 出力, Job → 仕事
