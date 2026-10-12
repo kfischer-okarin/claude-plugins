@@ -77,7 +77,7 @@ following the principles in this skill.
 ### Eliciting the Intended Behavior
 
 - Interview the Author until you share an understanding of the intended Agent
-  behavior before making any behavior changing edit. Find out in particular:
+  behavior. Find out in particular:
   - Which behavior the Author cares about, which they are indifferent to, and
     which they deliberately leave to the Agent's judgement
   - Where the End User enters the Job: which judgement calls stay with them and
