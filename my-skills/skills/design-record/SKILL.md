@@ -126,6 +126,11 @@ updated_at: YYYY-MM-DD
 
 ### Requirements
 
+- They are the few goals and constraints of the user's that drove the design,
+  each with what prompted it where the user said. Single tasks asked for along
+  the way, conveniences added during the work, and the user's general
+  preferences about how work is done are not requirements; such preferences
+  are candidates for agent instruction improvements.
 - Each heading is phrased in EARS form with "should" and the keywords in lower
   case: "The app should …", "When a screen loads, the app should …", "While …",
   "If …, then …", "Where …".
