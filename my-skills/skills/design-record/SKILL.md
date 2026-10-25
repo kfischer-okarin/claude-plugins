@@ -116,7 +116,7 @@ updated_at: YYYY-MM-DD
 
 ### DNNN.1 — <The decision, stated concisely>
 
-<Details, then the reasoning, unless the heading says it all.>
+<Why it won over the alternatives, unless the heading says it all.>
 ```
 
 - `NNN` is the record's number. Entries refer to each other, and to entries of
@@ -143,10 +143,11 @@ updated_at: YYYY-MM-DD
 - They are listed chronologically, in the order they were made.
 - The body of a user decision stays close to the user's own words, keeping
   qualifiers such as "for now".
-- The body introduces every command, file, component or concept the decision
-  creates, with its purpose, for a reader who does not know the final design. A
-  data structure it settles, such as a table schema, is shown in its final form.
-- The reasoning says why this option won; constraints and facts that forced it
-  belong here, and so do the alternatives not chosen where they matter.
+- The body introduces a command, file, component or concept only where the
+  reasoning needs it; what the code shows is left to the code. A data structure
+  the decision settles, such as a table schema, is shown in its final form.
+- The reasoning says why this option won over the alternatives that were
+  weighed, with the constraints and facts that decided it; how the work arrived
+  there is left out.
 - Who suggested an option is irrelevant: the entry records the choice and its
   reasoning only.
