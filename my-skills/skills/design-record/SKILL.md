@@ -60,7 +60,9 @@ the following:
      user can confirm or change each one in step 3.
    - Count as a user decision only what the user explicitly settled or agreed to
      in the conversation. Record whatever the agent filled in to make the design
-     concrete as a separate decision, one of the agent's choices.
+     concrete as a separate decision, one of the agent's choices, where it chose
+     between realistic alternatives; what it only checked, or left at a
+     default, is not a decision.
    - Leave out decisions below the level described in What Decisions Belong in
      the Design Record. If such a decision sits in one place in code written in
      the session and would not be obvious to a reader familiar with the language
