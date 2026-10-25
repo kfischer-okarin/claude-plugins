@@ -146,6 +146,8 @@ updated_at: YYYY-MM-DD
 - Each heading states the decision as the change it makes, such as "The
   desktop moved to …"; it stands alone when no reasoning hides behind it. An
   entry states its own decision without restating other entries.
+- A decision that replaces earlier ones names each of them in its body; one
+  decision may replace several.
 - The body of a user decision stays close to the user's own words, keeping
   qualifiers such as "for now".
 - The body introduces a command, file, component or concept only where the
