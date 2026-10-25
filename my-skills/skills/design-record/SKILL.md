@@ -35,7 +35,7 @@ the following:
 - the developer experience, such as configuration formats or the testing
   strategy
 - build, release and operations
-- accepted trade-offs and limits of scope
+- limits of scope
 
 ### Terms
 
@@ -149,5 +149,7 @@ updated_at: YYYY-MM-DD
 - The reasoning says why this option won over the alternatives that were
   weighed, with the constraints and facts that decided it; how the work arrived
   there is left out.
+- A trade-off accepted with a decision, and what follows from it, belong in that
+  decision's body rather than in entries of their own.
 - Who suggested an option is irrelevant: the entry records the choice and its
   reasoning only.
