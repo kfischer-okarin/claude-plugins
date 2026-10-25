@@ -116,7 +116,7 @@ updated_at: YYYY-MM-DD
 
 ## Decisions
 
-### DNNN.1 — <The decision, stated concisely>
+### DNNN.1 — <The decision, stated as the change it makes>
 
 <Why it won over the alternatives, unless the heading says it all.>
 ```
@@ -143,6 +143,9 @@ updated_at: YYYY-MM-DD
 ### Decisions
 
 - They are listed chronologically, in the order they were made.
+- Each heading states the decision as the change it makes, such as "The
+  desktop moved to …"; it stands alone when no reasoning hides behind it. An
+  entry states its own decision without restating other entries.
 - The body of a user decision stays close to the user's own words, keeping
   qualifiers such as "for now".
 - The body introduces a command, file, component or concept only where the
