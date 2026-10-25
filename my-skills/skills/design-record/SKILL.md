@@ -17,7 +17,8 @@ reader can tell what the user wanted, what was decided, what is deliberately out
 of scope, and why.
 
 The skill is invoked at the end of a stretch of work, so its conversation is the
-source of the record.
+source of the record. A session may also hold work that belongs to no stretch,
+such as routine maintenance done on the way, or several unrelated stretches.
 
 ### What Decisions Belong in the Design Record
 
@@ -53,6 +54,8 @@ the following:
    `docs/design/NNN-<slug>.md` if it has no convention. Extend the latest record
    instead only when the user says this session continues the latest record's
    stretch of work; never edit a record once a later one exists.
+   - Draft one record per stretch of work, leaving out what belongs to none.
+     When it is unclear where a stretch ends, ask the user before drafting.
    - Mark every choice the agent made on its own with *(agent's choice)*, so the
      user can confirm or change each one in step 3.
    - Count as a user decision only what the user explicitly settled or agreed to
