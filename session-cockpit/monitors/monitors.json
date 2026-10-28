@@ -1,0 +1,8 @@
+[
+  {
+    "name": "submissions",
+    "command": "mise exec -C \"${CLAUDE_PLUGIN_ROOT}\" -- \"${CLAUDE_PLUGIN_ROOT}\"/exe/session-cockpit watch",
+    "description": "What the user submitted from the session cockpit",
+    "when": "on-skill-invoke:start-cockpit"
+  }
+]

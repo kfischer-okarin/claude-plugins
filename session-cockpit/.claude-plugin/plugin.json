@@ -1,0 +1,8 @@
+{
+  "name": "session-cockpit",
+  "description": "A per-session cockpit in Emacs: the questions Claude asks, answered at your own pace, file annotations and a short brief of where the session stands.",
+  "author": {
+    "name": "Kevin Fischer"
+  },
+  "license": "MIT"
+}

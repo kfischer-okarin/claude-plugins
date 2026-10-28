@@ -1,0 +1,11 @@
+[q1] Should the watch also follow /clear?  new
+     ⌖ lib/watch.rb:3-7
+       def self.run(out:)
+         loop do
+           deliver(out)
+       … 2 more lines
+     ⌖ README.md:1
+       # Watch
+     1. ( ) Yes — Look the session up on every poll
+     2. ( ) No — Restart it instead
+      Other…

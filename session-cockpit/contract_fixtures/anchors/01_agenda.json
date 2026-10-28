@@ -1,0 +1,24 @@
+{
+  "questions": [
+    {
+      "id": "q1",
+      "question": "Should the watch also follow /clear?",
+      "options": [
+        { "label": "Yes", "description": "Look the session up on every poll" },
+        { "label": "No", "description": "Restart it instead" }
+      ],
+      "multiSelect": false,
+      "anchors": [
+        {
+          "file": "<project>/lib/watch.rb",
+          "start": 3,
+          "end": 7,
+          "text": "    def self.run(out:)\n      loop do\n        deliver(out)\n        sleep 0.1\n      end"
+        },
+        { "file": "<project>/README.md", "start": 1, "end": 1, "text": "# Watch" }
+      ],
+      "status": "open",
+      "new": true
+    }
+  ]
+}

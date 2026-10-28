@@ -1,0 +1,75 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+ENV["BUNDLE_GEMFILE"] ||= File.expand_path("../Gemfile", __dir__)
+require "bundler/setup"
+require_relative "../lib/session_cockpit"
+
+def main(argv)
+  repository = SessionCockpit::SessionStateRepository.new(determine_state_dir)
+  case argv.shift
+  when "mcp"
+    require_relative "../lib/session_cockpit/mcp_server"
+    SessionCockpit::MCPServer.run(repository: repository, claude_pid: determine_claude_pid,
+                                  initial_session_id: initial_session_id, monitor_command: monitor_command)
+  when "watch"
+    SessionCockpit::Watch.run(repository: repository, claude_pid: determine_claude_pid,
+                              initial_session_id: initial_session_id)
+  when "start"
+    # The start-cockpit skill, given the session ID.
+    state = repository.session_state(argv.fetch(0))
+    state.turn_cockpit_on
+    print SessionCockpit::Formatter.cockpit_on(state.agenda, project: state.project)
+  when "session-start"
+    # The SessionStart hook. What it prints, Claude reads.
+    input = JSON.parse($stdin.read)
+    state = repository.record_session_start(claude_pid: determine_claude_pid, session_id: input.fetch("session_id"),
+                                            project: input.fetch("cwd"))
+    # The monitor starts on the skill only once per Claude Code process, so
+    # a resumed session needs the skill again for the user's answers to arrive.
+    if input["source"] == "resume" && state.cockpit_on?
+      puts "This session uses the session cockpit, whose monitor does not run yet since Claude Code " \
+           "started again. Run the start-cockpit skill now, so the user's answers reach you."
+    end
+  else
+    abort "usage: session-cockpit mcp|watch|start SESSION_ID|session-start"
+  end
+end
+
+# How Claude starts the monitor by hand, as the plugin's monitors.json does,
+# when the plugin's own monitor isn't running.
+def monitor_command
+  root = File.expand_path("..", __dir__)
+  state_dir = "SESSION_COCKPIT_STATE_DIR=#{ENV["SESSION_COCKPIT_STATE_DIR"]} " if ENV["SESSION_COCKPIT_STATE_DIR"]
+  "#{state_dir}mise exec -C #{root} -- #{root}/exe/session-cockpit watch"
+end
+
+def determine_state_dir
+  ENV.fetch("SESSION_COCKPIT_STATE_DIR") { File.expand_path("~/.local/state/session-cockpit") }
+end
+
+# The PID of the Claude Code process this one runs under. Hooks and monitors
+# are told in CLAUDE_PID, MCP servers are not. Tests, which run without a
+# Claude Code process, set SESSION_COCKPIT_CLAUDE_PID.
+def determine_claude_pid
+  ENV["SESSION_COCKPIT_CLAUDE_PID"] || ENV["CLAUDE_PID"] || claude_ancestor_pid
+end
+
+def claude_ancestor_pid
+  pid = Process.ppid
+  while pid > 1
+    parent_pid, command = `ps -o ppid=,comm= -p #{pid}`.strip.split(" ", 2)
+    return pid.to_s if File.basename(command.to_s) == "claude"
+
+    pid = parent_pid.to_i
+  end
+  nil
+end
+
+# The session Claude Code started this process in. /clear moves on to another
+# one without restarting it.
+def initial_session_id
+  ENV.fetch("CLAUDE_CODE_SESSION_ID")
+end
+
+main(ARGV)

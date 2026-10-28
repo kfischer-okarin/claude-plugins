@@ -1,0 +1,8 @@
+{
+  "type": "submitted",
+  "comment": "Go ahead",
+  "answers": [
+    { "id": "q1", "selected": ["JSON lines (Recommended)"], "text": "Keep it greppable" },
+    { "id": "q2", "selected": ["Picker", "Header"] }
+  ]
+}

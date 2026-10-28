@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "session-cockpit": {
+      "command": "mise",
+      "args": ["exec", "-C", "${CLAUDE_PLUGIN_ROOT}", "--", "${CLAUDE_PLUGIN_ROOT}/exe/session-cockpit", "mcp"]
+    }
+  }
+}

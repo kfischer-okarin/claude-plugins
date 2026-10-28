@@ -1,0 +1,14 @@
+# frozen_string_literal: true
+
+require "minitest/test_task"
+
+Minitest::TestTask.create
+
+namespace :test do
+  desc "Run the Emacs tests in a throwaway Emacs daemon"
+  task :emacs do
+    sh "emacs/test/run-tests.sh"
+  end
+end
+
+task default: [:test, "test:emacs"]

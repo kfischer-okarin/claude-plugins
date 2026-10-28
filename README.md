@@ -34,3 +34,17 @@ A small collection of personal Claude Code skills.
 | `design-record`         | Turn a stretch of work's requirements and settled design decisions into a numbered design record, reviewed with you before it is final.           |
 
 <!-- markdownlint-enable MD013 -->
+
+### `session-cockpit`
+
+A per-session cockpit in Emacs: the questions Claude asks, answered at your
+own pace, file annotations and a short brief of where the session stands.
+Work in progress — see [`session-cockpit/PLAN.md`](session-cockpit/PLAN.md).
+
+Requires [mise](https://mise.jdx.dev) (Ruby 4.0).
+
+| Component                    | What it does                                                                                                             |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `session-cockpit` MCP server | Lets Claude ask the user questions and read the open ones, and keeps the session's log, taking over the user's submits.  |
+| `submissions` monitor        | Delivers what the user submits from the Emacs cockpit to Claude.                                                         |
+| SessionStart hook            | Keeps track of which session a Claude Code process is in, so `/clear` starts a fresh agenda.                             |

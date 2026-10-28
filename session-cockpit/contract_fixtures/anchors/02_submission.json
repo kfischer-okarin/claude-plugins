@@ -1,0 +1,6 @@
+{
+  "type": "submitted",
+  "comment": "Go ahead",
+  "answers": [{ "id": "q1", "selected": ["Yes"] }],
+  "lost_anchors": [{ "id": "q1", "file": "<project>/README.md", "start": 1, "end": 1 }]
+}
