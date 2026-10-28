@@ -362,7 +362,15 @@ took off a question."
                         'face 'session-cockpit-button
                         'mouse-face 'session-cockpit-button-hover
                         'keymap (define-keymap
-                                  "<header-line> <mouse-1>" #'session-cockpit-write-message)))))
+                                  "<header-line> <mouse-1>" #'session-cockpit-submit-clicked)))))
+
+(defun session-cockpit-submit-clicked (event)
+  "Write a message to Claude from the cockpit whose Submit was clicked.
+A click on a header line runs in the selected window, so this selects the
+clicked one, which EVENT tells, first."
+  (interactive "e")
+  (select-window (posn-window (event-start event)))
+  (session-cockpit-write-message))
 
 (defun session-cockpit--place-of-point ()
   "Return where point is: its section and line within it, its line and column."

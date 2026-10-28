@@ -266,17 +266,21 @@ ends in a newline, like a text file."
 Whitespace at its ends is left out."
   (string-trim (substring-no-properties (format-mode-line header-line-format))))
 
-(defun session-cockpit-test-user-clicks-in-header-line (label)
+(cl-defun session-cockpit-test-user-clicks-in-header-line (label &key (of (current-buffer)))
   "Click the button reading LABEL in the header line, as the user would.
-Afterwards the current buffer is the one the user is looking at."
-  (let* ((line (format-mode-line header-line-format))
+The header line is that of the window showing OF, whichever window is
+selected, as with a mouse.  Afterwards the current buffer is the one the
+user is looking at."
+  (let* ((window (or (get-buffer-window of) (ert-fail (format "%s is not shown" of))))
+         (line (with-selected-window window (format-mode-line header-line-format)))
          (position (or (string-search label line)
                        (ert-fail (format "No %s in the header line" label))))
          (keymap (get-text-property position 'keymap line))
          (command (and keymap (lookup-key keymap [header-line mouse-1]))))
     (unless (commandp command)
       (ert-fail (format "Clicking %s in the header line does nothing" label)))
-    (call-interactively command)
+    (let ((last-nonmenu-event `(mouse-1 (,window header-line (,position . 0) 0))))
+      (call-interactively command nil (vector last-nonmenu-event)))
     (set-buffer (window-buffer (selected-window)))))
 
 (defun session-cockpit-test-user-submits-with-comment (comment)

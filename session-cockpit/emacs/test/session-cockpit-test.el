@@ -528,6 +528,18 @@
 
     (should (equal (session-cockpit-test-submissions session) '("Go ahead")))))
 
+(ert-deftest session-cockpit-test-clicking-submit-while-another-window-is-selected-opens-the-cockpits-message-buffer ()
+  (session-cockpit-test-with-session session
+    (session-cockpit-show (session-cockpit-test-session-id session))
+    (let ((cockpit (current-buffer)))
+      (select-window (display-buffer (get-buffer-create "*scratch*") '(nil (inhibit-same-window . t))))
+
+      (session-cockpit-test-user-clicks-in-header-line "Submit" :of cockpit)
+      (insert "Go ahead")
+      (session-cockpit-test-user-types "C-c C-c")
+
+      (should (equal (session-cockpit-test-submissions session) '("Go ahead"))))))
+
 (ert-deftest session-cockpit-test-unsent-answers-survive-restarting-emacs ()
   (session-cockpit-test-with-session session
     (session-cockpit-test-ask session "JSON lines or SQLite?" '("JSON lines" "SQLite"))
