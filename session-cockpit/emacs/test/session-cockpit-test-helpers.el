@@ -286,6 +286,23 @@ The user opens the message buffer, writes COMMENT and sends it."
   (insert comment)
   (session-cockpit-test-user-types "C-c C-c"))
 
+(defun session-cockpit-test-written-comment ()
+  "Return what the user wrote in the message buffer, its # lines left out."
+  (string-trim (replace-regexp-in-string "^#.*\n?" "" (buffer-string))))
+
+(defun session-cockpit-test-without-comment-line (monitor-output)
+  "Return MONITOR-OUTPUT, what Claude read of a submit, without its comment.
+The message buffer's preview shows the rest before a comment is written."
+  (replace-regexp-in-string "^Comment: .*\n" "" monitor-output))
+
+(defun session-cockpit-test-message-preview ()
+  "Return what the message buffer shows Claude will read, as one string.
+That is the # lines after \"Claude reads your submit as:\", without the #."
+  (save-excursion
+    (goto-char (point-min))
+    (search-forward "# Claude reads your submit as:\n")
+    (replace-regexp-in-string "^# " "" (buffer-substring (point) (point-max)))))
+
 (defun session-cockpit-test-user-types (&rest keys)
   "Type KEYS, in `kbd' notation, as the user would.
 Afterwards the current buffer is the one the user is looking at.  Skipped in

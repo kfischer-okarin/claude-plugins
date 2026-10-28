@@ -722,23 +722,82 @@ They come as a submission lists them: question ID, file and lines."
   "C-c C-k" #'session-cockpit-discard-message)
 
 (define-derived-mode session-cockpit-message-mode text-mode "Cockpit Message"
-  "Major mode for writing a message to Claude.")
+  "Major mode for writing a message to Claude.
+Lines starting with # are left out of the message, as in a commit message."
+  (setq-local comment-start "# ")
+  (setq-local font-lock-defaults '((("^#.*" . 'font-lock-comment-face)) t)))
 
 (defvar-local session-cockpit--cockpit-buffer nil
   "The cockpit buffer a message buffer was opened from.")
 
 (defun session-cockpit-write-message ()
-  "Write a message to Claude in the session of the current cockpit."
+  "Write a message to Claude in the session of the current cockpit.
+Below the comment, the message buffer shows what Claude will read of the
+submit.  Opened again, it keeps the comment and shows the submit anew."
   (interactive)
   (let ((session-id session-cockpit-session-id)
         (cockpit (current-buffer))
+        (preview (session-cockpit--submission-preview (current-buffer)))
         (buffer (get-buffer-create (format "*session-cockpit message: %s*"
                                            session-cockpit-session-id))))
     (with-current-buffer buffer
-      (session-cockpit-message-mode)
-      (setq session-cockpit-session-id session-id
-            session-cockpit--cockpit-buffer cockpit))
+      (let ((comment (session-cockpit--message-comment)))
+        (session-cockpit-message-mode)
+        (setq session-cockpit-session-id session-id
+              session-cockpit--cockpit-buffer cockpit)
+        (erase-buffer)
+        (insert comment "\n"
+                "# Write your comment for Claude above; lines starting with # are left out.\n"
+                "# C-c C-c sends it with your answers, C-c C-k cancels.\n"
+                "#\n"
+                "# Claude reads your submit as:\n"
+                (mapconcat (lambda (line) (concat "# " line "\n")) preview))
+        (goto-char (+ (point-min) (length comment)))))
     (pop-to-buffer buffer)))
+
+(defun session-cockpit--message-comment ()
+  "Return the comment written in the current message buffer.
+That is its text without the lines starting with #, trimmed."
+  (string-trim (replace-regexp-in-string "^#.*\n?" "" (buffer-string))))
+
+(defun session-cockpit--submission-preview (cockpit)
+  "Return the lines Claude will read of a submit from COCKPIT, but the comment.
+They are as the monitor prints them: each unsent answer under its question,
+then the lines questions point at that are not in their files anymore."
+  (with-current-buffer cockpit
+    (let ((questions (alist-get 'questions (session-cockpit--agenda session-cockpit-session-id))))
+      `("**Dashboard submit**"
+        ,@(seq-mapcat (lambda (answer)
+                        (session-cockpit--answer-preview
+                         answer (seq-find (lambda (question)
+                                            (equal (alist-get 'id question) (alist-get 'id answer)))
+                                          questions)))
+                      (session-cockpit--submission-answers cockpit))
+        ,@(seq-map (lambda (anchor)
+                     (format "⚠ [%s] %s is not in the file anymore"
+                             (alist-get 'id anchor)
+                             (session-cockpit--anchor-reference
+                              (session-cockpit--shown-path (alist-get 'file anchor))
+                              (cons (alist-get 'start anchor) (alist-get 'end anchor)))))
+                   (session-cockpit--lost-anchors cockpit))))))
+
+(defun session-cockpit--answer-preview (answer question)
+  "Return the lines Claude will read of ANSWER to QUESTION.
+Its text is the answer to a question without options, reads as Other when
+no option was picked, and as a note on the pick otherwise."
+  (let ((selected (append (alist-get 'selected answer) nil))
+        (text (alist-get 'text answer)))
+    `(,(format "[%s] %s" (alist-get 'id answer) (car (split-string (alist-get 'question question) "\n")))
+      ,@(when selected
+          (list (concat "  → " (string-join selected ", "))))
+      ,@(when (and text (not (string-empty-p text)))
+          (let ((label (cond ((null (alist-get 'options question)) "Answer: ")
+                             ((null selected) "Other: ")
+                             (t "Note: ")))
+                (lines (split-string text "\n")))
+            (cons (concat "  " label (car lines))
+                  (mapcar (lambda (line) (concat "  " (make-string (length label) ?\s) line))
+                          (cdr lines))))))))
 
 (defun session-cockpit-send-message ()
   "Send the message in the current buffer to Claude, with the unsent answers.
@@ -747,7 +806,7 @@ It also tells which lines questions point at are not in their files anymore."
   (let ((lost-anchors (session-cockpit--lost-anchors session-cockpit--cockpit-buffer)))
     (session-cockpit--submit session-cockpit-session-id
                              `((type . "submitted")
-                               (comment . ,(buffer-string))
+                               (comment . ,(session-cockpit--message-comment))
                                (answers . ,(session-cockpit--submission-answers
                                             session-cockpit--cockpit-buffer))
                                ,@(unless (seq-empty-p lost-anchors)
@@ -761,7 +820,7 @@ It also tells which lines questions point at are not in their files anymore."
   "Close the message buffer, discarding the comment written in it.
 Asks first if there is a comment to lose."
   (interactive)
-  (when (or (string-blank-p (buffer-string))
+  (when (or (string-empty-p (session-cockpit--message-comment))
             (y-or-n-p "Discard this comment? "))
     (quit-window t)))
 

@@ -33,7 +33,12 @@
       (session-cockpit-test-user-types "r"))
     (session-cockpit-test-goto-line-with "Which parts ship first?")
     (session-cockpit-test-user-types "1" "2")
-    (session-cockpit-test-user-submits-with-comment "Go ahead")
+    (session-cockpit-test-user-types "c")
+    (should (equal (session-cockpit-test-message-preview)
+                   (session-cockpit-test-without-comment-line
+                    (session-cockpit-test-contract-fixture "round_trip/02_monitor.md"))))
+    (insert "Go ahead")
+    (session-cockpit-test-user-types "C-c C-c")
     (should (equal (session-cockpit-test-last-submission session)
                    (session-cockpit-test-contract-fixture "round_trip/02_submission.json")))
 
@@ -78,7 +83,12 @@
                      (session-cockpit-test-contract-fixture "anchors/02_dashboard.txt")))
       (session-cockpit-test-goto-line-with "Should the watch also follow /clear?")
       (session-cockpit-test-user-types "1")
-      (session-cockpit-test-user-submits-with-comment "Go ahead")
+      (session-cockpit-test-user-types "c")
+      (should (equal (session-cockpit-test-message-preview)
+                     (session-cockpit-test-without-comment-line
+                      (session-cockpit-test-contract-fixture "anchors/02_monitor.md"))))
+      (insert "Go ahead")
+      (session-cockpit-test-user-types "C-c C-c")
       (should (equal (session-cockpit-test-last-submission session)
                      (session-cockpit-test-contract-fixture "anchors/02_submission.json" project))))))
 

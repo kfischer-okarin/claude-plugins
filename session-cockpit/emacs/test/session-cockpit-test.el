@@ -436,7 +436,7 @@
 
     (session-cockpit-test-user-types "c")
 
-    (should (equal (buffer-string) ""))))
+    (should (equal (session-cockpit-test-written-comment) ""))))
 
 (ert-deftest session-cockpit-test-c-c-c-k-asks-before-discarding-a-written-comment ()
   (session-cockpit-test-with-session session
@@ -447,7 +447,55 @@
     (should (equal (session-cockpit-test-user-will-answer "n"
                      (session-cockpit-test-user-types "C-c C-k"))
                    "Discard this comment? "))
-    (should (equal (buffer-string) "Go ahead"))))
+    (should (equal (session-cockpit-test-written-comment) "Go ahead"))))
+
+(ert-deftest session-cockpit-test-lines-starting-with-hash-are-left-out-of-the-comment ()
+  (session-cockpit-test-with-session session
+    (session-cockpit-show (session-cockpit-test-session-id session))
+    (session-cockpit-test-user-types "c")
+    (insert "Go ahead\n# just a note to myself")
+
+    (session-cockpit-test-user-types "C-c C-c")
+
+    (should (equal (session-cockpit-test-submissions session) '("Go ahead")))))
+
+(ert-deftest session-cockpit-test-the-message-buffer-shows-what-claude-will-read ()
+  (session-cockpit-test-with-session session
+    (session-cockpit-test-ask session "What should the log be called?")
+    (session-cockpit-test-ask session "JSON lines or SQLite?" '("JSON lines" "SQLite"))
+    (session-cockpit-show (session-cockpit-test-session-id session))
+    (session-cockpit-test-goto-line-with "What should the log be called?")
+    (session-cockpit-test-user-will-write "events"
+      (session-cockpit-test-user-types "r"))
+    (session-cockpit-test-goto-line-with "JSON lines or SQLite?")
+    (session-cockpit-test-user-will-write "Whatever is\neasiest to grep"
+      (session-cockpit-test-user-types "r"))
+
+    (session-cockpit-test-user-types "c")
+
+    (should (equal (session-cockpit-test-message-preview)
+                   (concat "**Dashboard submit**\n"
+                           "[q1] What should the log be called?\n"
+                           "  Answer: events\n"
+                           "[q2] JSON lines or SQLite?\n"
+                           "  Other: Whatever is\n"
+                           "         easiest to grep\n")))))
+
+(ert-deftest session-cockpit-test-opening-the-message-buffer-again-keeps-the-comment-and-shows-the-submit-anew ()
+  (session-cockpit-test-with-session session
+    (session-cockpit-test-ask session "JSON lines or SQLite?" '("JSON lines" "SQLite"))
+    (session-cockpit-show (session-cockpit-test-session-id session))
+    (session-cockpit-test-user-types "c")
+    (insert "Go ahead")
+    (session-cockpit-show (session-cockpit-test-session-id session))
+    (session-cockpit-test-goto-line-with "JSON lines or SQLite?")
+    (session-cockpit-test-user-types "1")
+
+    (session-cockpit-test-user-types "c")
+
+    (should (equal (session-cockpit-test-written-comment) "Go ahead"))
+    (should (equal (session-cockpit-test-message-preview)
+                   "**Dashboard submit**\n[q1] JSON lines or SQLite?\n  → JSON lines\n"))))
 
 (ert-deftest session-cockpit-test-the-header-line-counts-the-unsent-answers ()
   (session-cockpit-test-with-session session
