@@ -20,15 +20,24 @@ module SessionCockpit
     end
 
     # Remembers which session the Claude Code process is in now, since /clear
-    # switches sessions without restarting the MCP server or the monitor, and
-    # the session's PROJECT, and returns the session's state. Forgets
-    # processes that have ended along the way.
-    def record_session_start(claude_pid:, session_id:, project:)
+    # and /branch switch sessions without restarting the MCP server or the
+    # monitor, and the session's PROJECT and TRANSCRIPT, and returns the
+    # session's state. A session FORKED from another one takes over its
+    # state. Forgets processes that have ended along the way.
+    def record_session_start(claude_pid:, session_id:, project:, transcript:, forked:)
       forget_ended_claude_processes
       path = by_pid_path(claude_pid)
+      previous_session_id = File.read(path) if File.exist?(path)
       FileUtils.mkdir_p(File.dirname(path))
       AtomicFile.write(path, session_id)
-      session_state(session_id).tap { it.record_project(project) }
+      state = session_state(session_id)
+      state.record_session(project: project, transcript: transcript)
+      if forked
+        # /branch forks in the same process, --fork-session in a new one.
+        parent = (Transcript.forked_from(transcript) if File.exist?(transcript)) || previous_session_id
+        state.take_over_from(session_state(parent)) if parent
+      end
+      state
     end
 
     # Remembers that this process is the monitor of the Claude Code process

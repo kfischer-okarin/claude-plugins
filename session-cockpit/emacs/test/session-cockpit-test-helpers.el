@@ -50,15 +50,18 @@ cockpit opened."
                   (encode-time (iso8601-parse (concat (string-replace " " "T" time) ":00")))))
 
 (cl-defun session-cockpit-test-ask (session question &optional options
-                                             &key multi-select anchors (status "open") new changed)
+                                             &key multi-select anchors (status "open") new changed
+                                             restored-answer)
   "Put QUESTION with OPTIONS on SESSION's agenda, as Claude would.
 An option is its label, or a list of its label, description and, optionally,
 preview; without options, the question is answered in free text.  Several
 options may be picked if MULTI-SELECT.  ANCHORS are the places in SESSION's
 project the question points at, each a list of file, first and last line;
 their text is read from the project as the MCP server does.  The question
-has STATUS, and is marked new if NEW and changed if CHANGED.  Questions are
-numbered q1, q2, … in the order they are asked."
+has STATUS, and is marked new if NEW and changed if CHANGED.
+RESTORED-ANSWER, a cons of the labels picked and the text, is what a
+rewind of the conversation took back from Claude.  Questions are numbered
+q1, q2, … in the order they are asked."
   (session-cockpit-test--update-agenda session
     (lambda (questions)
       (append questions
@@ -72,7 +75,11 @@ numbered q1, q2, … in the order they are asked."
                                                 anchors))))
                       (status . ,status)
                       ,@(when new '((new . t)))
-                      ,@(when changed '((changed . t)))))))))
+                      ,@(when changed '((changed . t)))
+                      ,@(when restored-answer
+                          `((restored_answer . ((selected . ,(vconcat (car restored-answer)))
+                                                ,@(when (cdr restored-answer)
+                                                    `((text . ,(cdr restored-answer))))))))))))))
 
 (defun session-cockpit-test-set-status (session question status)
   "Give QUESTION in SESSION the STATUS, as Claude's side would."

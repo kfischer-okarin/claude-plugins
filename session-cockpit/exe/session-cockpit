@@ -23,11 +23,14 @@ def main(argv)
   when "session-start"
     # The SessionStart hook. What it prints, Claude reads.
     input = JSON.parse($stdin.read)
-    state = repository.record_session_start(claude_pid: determine_claude_pid, session_id: input.fetch("session_id"),
-                                            project: input.fetch("cwd"))
+    claude_pid = determine_claude_pid
+    state = repository.record_session_start(claude_pid: claude_pid, session_id: input.fetch("session_id"),
+                                            project: input.fetch("cwd"), transcript: input.fetch("transcript_path"),
+                                            forked: input["source"] == "fork")
     # The monitor starts on the skill only once per Claude Code process, so
-    # a resumed session needs the skill again for the user's answers to arrive.
-    if input["source"] == "resume" && state.cockpit_on?
+    # a resumed or forked session in a new process needs the skill again for
+    # the user's answers to arrive.
+    if state.cockpit_on? && !repository.monitor_running?(claude_pid: claude_pid)
       puts "This session uses the session cockpit, whose monitor does not run yet since Claude Code " \
            "started again. Run the start-cockpit skill now, so the user's answers reach you."
     end

@@ -1,0 +1,25 @@
+{
+  "questions": [
+    {
+      "id": "q1",
+      "question": "JSON lines or SQLite?",
+      "options": [
+        { "label": "JSON lines (Recommended)", "description": "Greppable and append-only" },
+        { "label": "SQLite", "description": "Queryable, but a dependency" }
+      ],
+      "multiSelect": false,
+      "status": "open",
+      "new": true,
+      "restored_answer": { "selected": ["SQLite"], "text": "Queries matter" }
+    },
+    {
+      "id": "q2",
+      "question": "What should the log be called?",
+      "options": [],
+      "multiSelect": false,
+      "status": "open",
+      "new": true,
+      "restored_answer": { "selected": [], "text": "events" }
+    }
+  ]
+}

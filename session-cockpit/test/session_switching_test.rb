@@ -16,12 +16,13 @@ class SessionSwitchingTest < SessionCockpit::SystemTestCase
     assert_equal ["Fresh start?"], read_agenda(session.id)["questions"].map { it["question"] }
   end
 
-  def test_after_clear_the_new_session_records_its_project
+  def test_after_clear_the_new_session_records_its_project_and_transcript
     session = start_session(project: "/Users/me/workspace/claude-plugins")
 
     session.clear
 
-    assert_equal({ "project" => "/Users/me/workspace/claude-plugins" }, session.info)
+    assert_equal({ "project" => "/Users/me/workspace/claude-plugins", "transcript" => session.transcript_path },
+                 session.info)
   end
 
   def test_starting_a_session_forgets_claude_processes_that_have_ended

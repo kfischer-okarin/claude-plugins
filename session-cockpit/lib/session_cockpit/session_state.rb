@@ -12,15 +12,26 @@ module SessionCockpit
     end
 
     # Records PROJECT, the directory Claude Code runs the session in, for
-    # Emacs's session picker and for the files questions point at.
-    def record_project(project)
+    # Emacs's session picker and for the files questions point at, and
+    # TRANSCRIPT, the file Claude Code keeps the conversation in, for what a
+    # rewind took back.
+    def record_session(project:, transcript:)
       FileUtils.mkdir_p(@path)
-      AtomicFile.write(file("session.json"), JSON.generate(project: project))
+      AtomicFile.write(file("session.json"), JSON.generate(project: project, transcript: transcript))
     end
 
     # The directory Claude Code runs the session in.
-    def project
-      JSON.parse(File.read(file("session.json")))["project"]
+    def project = info["project"]
+
+    def info = JSON.parse(File.read(file("session.json")))
+
+    # Takes over the log and the cockpit of the session in PARENT, which this
+    # one was forked from, such as through /branch: the conversation they
+    # belong to came along. What the parent delivered was delivered here too.
+    def take_over_from(parent)
+      %w[events.jsonl agenda.json delivered cockpit].each do |name|
+        FileUtils.cp(parent.file(name), file(name)) if File.exist?(parent.file(name))
+      end
     end
 
     def id = File.basename(@path)
@@ -41,33 +52,34 @@ module SessionCockpit
     end
 
     # Appends the events the block builds from the agenda as it is now, all
-    # or none, and returns them. Tool calls and the inbox take turns, so they
-    # neither hand out the same ID nor leave an outdated agenda behind.
+    # or none, and returns them.
     def append_all
-      FileUtils.mkdir_p(@path)
-      LOG_MUTEX.synchronize do
-        File.open(file("events.jsonl"), "a+") do |log|
-          log.rewind
-          agenda = Agenda.from_events(log.each_line.map { JSON.parse(it) })
-          events = yield(agenda)
-          log.write(events.map { "#{JSON.generate(it)}\n" }.join)
-          log.flush
-          AtomicFile.write(file("agenda.json"), JSON.generate(events.reduce(agenda, :apply).to_h))
-          events
-        end
-      end
+      append_to_log { yield(Agenda.from_events(it)) }
     end
 
     # Takes the user's submissions out of the inbox into the log, oldest
-    # first. A file that does not parse yet is still being written, so it
-    # and everything after it wait for the next round.
+    # first, each with an ID. A file that does not parse yet is still being
+    # written, so it and everything after it wait for the next round.
     def integrate_inbox
       Dir.glob(File.join(file("inbox"), "*.json")).sort.each do |path|
         event = JSON.parse(File.read(path))
-        append { event }
+        append { event.merge("id" => it.next_submission_id) }
         File.delete(path)
       rescue JSON::ParserError
         break
+      end
+    end
+
+    # Logs what a rewind of the conversation took back, as far as the
+    # transcript tells: tool calls of Claude's and deliveries of submissions
+    # it no longer contains.
+    def notice_rewinds
+      transcript_path = info["transcript"]
+      return unless File.exist?(transcript_path)
+
+      append_to_log do |logged|
+        rewound = Rewind.taken_back(logged, Transcript.read(transcript_path), project: project)
+        rewound ? [rewound] : []
       end
     end
 
@@ -91,7 +103,32 @@ module SessionCockpit
       Agenda.from_events(events)
     end
 
+    protected
+
+    def file(name)
+      File.join(@path, name)
+    end
+
     private
+
+    # Appends the events the block builds from those logged so far, all or
+    # none, and returns them. Tool calls, the inbox and noticing rewinds take
+    # turns, so they neither hand out the same ID nor leave an outdated
+    # agenda behind.
+    def append_to_log
+      FileUtils.mkdir_p(@path)
+      LOG_MUTEX.synchronize do
+        File.open(file("events.jsonl"), "a+") do |log|
+          log.rewind
+          logged = log.each_line.map { JSON.parse(it) }
+          events = yield(logged)
+          log.write(events.map { "#{JSON.generate(it)}\n" }.join)
+          log.flush
+          AtomicFile.write(file("agenda.json"), JSON.generate(Agenda.from_events(logged + events).to_h))
+          events
+        end
+      end
+    end
 
     # The log's lines after OFFSET, leaving out a last line still being
     # written.
@@ -100,10 +137,6 @@ module SessionCockpit
         log.seek(offset)
         log.read.lines.select { it.end_with?("\n") }
       end
-    end
-
-    def file(name)
-      File.join(@path, name)
     end
   end
 end

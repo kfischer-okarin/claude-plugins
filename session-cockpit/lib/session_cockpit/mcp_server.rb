@@ -15,8 +15,20 @@ module SessionCockpit
     # plugin's own monitor isn't running.
     def self.run(repository:, claude_pid:, initial_session_id:, monitor_command:)
       Thread.new do
+        checked_at = Time.at(0)
+        checked_version = nil
         loop do
-          repository.current_session_state(claude_pid: claude_pid, fallback: initial_session_id).integrate_inbox
+          state = repository.current_session_state(claude_pid: claude_pid, fallback: initial_session_id)
+          state.integrate_inbox
+          # Once the transcript changed, and every two seconds at most, since
+          # it can be large.
+          if state.cockpit_on? && Time.now - checked_at > 2
+            transcript = state.info["transcript"]
+            version = [transcript, File.exist?(transcript) && File.mtime(transcript)]
+            state.notice_rewinds unless version == checked_version
+            checked_at = Time.now
+            checked_version = version
+          end
           sleep 0.1
         end
       end
@@ -73,14 +85,18 @@ module SessionCockpit
       end
 
       # Logs the events the block builds from the session's agenda as it is
-      # now, all or none, and returns them.
+      # now, all or none, and returns them. Each names the tool call it came
+      # from, so a rewind of the conversation can take it back.
       def self.log_events(server_context, &build_events)
-        current_session_state(server_context).append_all(&build_events)
+        tool_use_id = server_context.fetch(:_meta).fetch(:"claudecode/toolUseId")
+        current_session_state(server_context).append_all do |agenda|
+          build_events.(agenda).map { it.merge("tool_use_id" => tool_use_id) }
+        end
       end
 
-      # The state of the session Claude Code is in now. Refuses unless its
-      # cockpit is on and the monitor runs, since otherwise the user's
-      # answers never reach Claude.
+      # The state of the session Claude Code is in now, with what a rewind
+      # took back left out. Refuses unless its cockpit is on and the monitor
+      # runs, since otherwise the user's answers never reach Claude.
       def self.current_session_state(server_context)
         repository = server_context.fetch(:repository)
         claude_pid = server_context.fetch(:claude_pid)
@@ -95,7 +111,7 @@ module SessionCockpit
             CLAUDE_CODE_SESSION_ID=#{state.id} #{server_context.fetch(:monitor_command)}
           TEXT
         end
-        state
+        state.tap(&:notice_rewinds)
       end
 
       # VALUE with string keys all the way down, as it is logged.

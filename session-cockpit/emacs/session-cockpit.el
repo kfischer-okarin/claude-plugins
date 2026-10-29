@@ -314,6 +314,7 @@ With neither, the question has no unsent answer."
 
 (defun session-cockpit--refresh ()
   "Draw the open questions and the user's unsent answers, keeping point's place."
+  (session-cockpit--take-up-restored-answers)
   (session-cockpit--drop-stale-answers)
   (let ((place (session-cockpit--place-of-point))
         (inhibit-read-only t)
@@ -329,6 +330,27 @@ With neither, the question has no unsent answer."
     (magit-section-show magit-root-section)
     (session-cockpit--goto-place place))
   (session-cockpit--mark-file-buffers))
+
+(defvar-local session-cockpit--restored-answers-taken-up nil
+  "IDs of the questions whose restored answer the cockpit took up already.")
+
+(defun session-cockpit--take-up-restored-answers ()
+  "Make the answers a rewind took back from Claude unsent answers again, and save.
+Each is taken up once, so one the user deleted stays deleted, and only
+where the user has no unsent answer of their own."
+  (let ((changed nil))
+    (dolist (question (session-cockpit--open-questions session-cockpit-session-id))
+      (let-alist question
+        (when (and .restored_answer
+                   (not (member .id session-cockpit--restored-answers-taken-up)))
+          (push .id session-cockpit--restored-answers-taken-up)
+          (unless (alist-get .id session-cockpit--answers nil nil #'equal)
+            (push (cons .id (cons (alist-get 'selected .restored_answer)
+                                  (alist-get 'text .restored_answer)))
+                  session-cockpit--answers)
+            (setq changed t)))))
+    (when changed
+      (session-cockpit--save-unsent-answers))))
 
 (defun session-cockpit--drop-stale-answers ()
   "Drop what Claude made moot of the unsent answers meanwhile, and save.

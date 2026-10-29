@@ -92,5 +92,17 @@
       (should (equal (session-cockpit-test-last-submission session)
                      (session-cockpit-test-contract-fixture "anchors/02_submission.json" project))))))
 
+(ert-deftest session-cockpit-test-rewind ()
+  (session-cockpit-test-with-session session
+    (session-cockpit-test-set-agenda
+     session (session-cockpit-test-contract-fixture "rewind/01_agenda.json"))
+    (session-cockpit-show (session-cockpit-test-session-id session))
+    (should (equal (session-cockpit-test-visible-text)
+                   (session-cockpit-test-contract-fixture "rewind/01_dashboard.txt")))
+
+    (session-cockpit-test-user-submits-with-comment "Go ahead")
+    (should (equal (session-cockpit-test-last-submission session)
+                   (session-cockpit-test-contract-fixture "rewind/02_submission.json")))))
+
 (provide 'session-cockpit-contracts-test)
 ;;; session-cockpit-contracts-test.el ends here

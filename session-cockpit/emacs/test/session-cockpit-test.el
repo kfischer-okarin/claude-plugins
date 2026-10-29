@@ -315,6 +315,35 @@
                      (session-cockpit-test-user-clicks "Other…" :on "Other…"))
                    '(:reference "[q1] Which name?" :initial-text nil)))))
 
+(ert-deftest session-cockpit-test-an-answer-a-rewind-took-back-is-restored-as-unsent ()
+  (session-cockpit-test-with-session session
+    (session-cockpit-test-ask session "Which name?" '("events" "log")
+                              :restored-answer '(("log") . "Shorter"))
+
+    (session-cockpit-show (session-cockpit-test-session-id session))
+
+    (session-cockpit-test-buffer-should-read
+     "[q1] Which name?"
+     "     1. ( ) events"
+     "     2. (•) log"
+     "     ↳ you: Shorter  unsubmitted  🗑️")))
+
+(ert-deftest session-cockpit-test-a-restored-answer-deleted-stays-deleted ()
+  (session-cockpit-test-with-session session
+    (session-cockpit-test-ask session "Which name?" '("events" "log")
+                              :restored-answer '(nil . "Shorter"))
+    (session-cockpit-show (session-cockpit-test-session-id session))
+    (session-cockpit-test-goto-line-with "↳ you: Shorter")
+    (session-cockpit-test-user-types "k")
+
+    (session-cockpit-test-user-types "g")
+
+    (session-cockpit-test-buffer-should-read
+     "[q1] Which name?"
+     "     1. ( ) events"
+     "     2. ( ) log"
+     "      Other…")))
+
 (ert-deftest session-cockpit-test-k-on-unsent-text-deletes-it ()
   (session-cockpit-test-with-session session
     (session-cockpit-test-ask session "Which name?" '("events" "log"))

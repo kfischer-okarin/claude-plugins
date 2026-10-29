@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "cgi"
 require "fileutils"
 require "json"
 require "minitest/autorun"
@@ -14,10 +15,12 @@ module SessionCockpit
   CONTRACT_FIXTURES = File.expand_path("../contract_fixtures", __dir__)
 
   # The text of the contract fixture at PATH, with <project> standing for
-  # PROJECT, since absolute paths differ from run to run.
-  def self.contract_fixture_content(path, project:)
+  # PROJECT and <transcript> for TRANSCRIPT, since absolute paths differ
+  # from run to run.
+  def self.contract_fixture_content(path, project:, transcript: nil)
     content = File.read(File.join(CONTRACT_FIXTURES, path))
-    project ? content.gsub("<project>", project) : content
+    content = content.gsub("<project>", project) if project
+    transcript ? content.gsub("<transcript>", transcript) : content
   end
 
   # Runs the real `session-cockpit` executable as subprocesses against a
@@ -85,15 +88,17 @@ module SessionCockpit
     end
 
     # The contract fixture at PATH: parsed if it is JSON, as text otherwise.
-    # <project> in it stands for PROJECT, the directory the session runs in.
-    def contract_fixture(path, project: nil)
-      content = SessionCockpit.contract_fixture_content(path, project: project)
+    # <project> in it stands for PROJECT, the directory the session runs in,
+    # and <transcript> for TRANSCRIPT, the file of its conversation.
+    def contract_fixture(path, project: nil, transcript: nil)
+      content = SessionCockpit.contract_fixture_content(path, project: project, transcript: transcript)
       path.end_with?(".json") ? JSON.parse(content) : content
     end
 
     # Runs the SessionStart hook as the Claude Code process CLAUDE_PID would.
     def record_session_start_for(claude_pid:)
-      input = JSON.generate(session_id: SecureRandom.uuid, source: "startup", cwd: "/Users/me/workspace/some-project")
+      input = JSON.generate(session_id: SecureRandom.uuid, source: "startup", cwd: "/Users/me/workspace/some-project",
+                            transcript_path: "/Users/me/.claude/projects/some-project/session.jsonl")
       output, status = Open3.capture2e(cli_env.merge("CLAUDE_PID" => claude_pid), EXE, "session-start",
                                        stdin_data: input)
       assert status.success?, output
@@ -128,6 +133,7 @@ module SessionCockpit
       @base_env = env
       @project = project
       @next_request_id = 0
+      @transcript = TestTranscript.new(transcript_path)
     end
 
     def start
@@ -137,7 +143,39 @@ module SessionCockpit
     # Continues under a new session ID, as Claude Code does on /clear.
     def clear
       @id = SecureRandom.uuid
+      @transcript = TestTranscript.new(transcript_path)
       run_session_start_hook(source: "clear")
+    end
+
+    # Continues in a copy of the conversation so far under a new session ID,
+    # as Claude Code does on /branch.
+    def branch
+      fork_conversation
+      run_session_start_hook(source: "fork")
+    end
+
+    # Starts Claude Code again on a copy of this session's conversation, as
+    # `claude --resume --fork-session` does, and returns what the
+    # SessionStart hook tells Claude.
+    def fork_session
+      quit
+      fork_conversation
+      launch_claude_code(source: "fork")
+    end
+
+    # The user sends TEXT to Claude.
+    def prompt(text)
+      @transcript.prompt(text)
+    end
+
+    # The user rewinds the conversation to just before they sent PROMPT.
+    def rewind_to_before(prompt)
+      @transcript.rewind_to_before(prompt)
+    end
+
+    # Claude Code compacts the conversation.
+    def compact
+      @transcript.compact
     end
 
     # Runs the start-cockpit skill, which turns the cockpit on and starts the
@@ -172,9 +210,19 @@ module SessionCockpit
     end
 
     # Calls the tool NAME on the MCP server and returns the reply text Claude
-    # would read.
+    # would read. The call goes into the transcript.
     def call_mcp_tool(name, **arguments)
-      request("tools/call", name: name, arguments: arguments)["content"].map { it["text"] }.join
+      tool_use_id = "toolu_#{SecureRandom.hex(12)}"
+      @transcript.tool_call(name, tool_use_id)
+      call_with_tool_use_id(name, tool_use_id, arguments)
+    end
+
+    # Calls the tool NAME as call_mcp_tool does, but in the same message as a
+    # call of another tool.
+    def call_mcp_tool_together_with_another_tool(name, **arguments)
+      tool_use_id = "toolu_#{SecureRandom.hex(12)}"
+      @transcript.tool_call_together_with_another(name, tool_use_id)
+      call_with_tool_use_id(name, tool_use_id, arguments)
     end
 
     # Submits COMMENT, ANSWERS and the LOST_ANCHORS Emacs could not find
@@ -197,13 +245,22 @@ module SessionCockpit
       JSON.parse(File.read(File.join(@base_env.fetch("SESSION_COCKPIT_STATE_DIR"), id, "agenda.json")))
     end
 
-    # What the session recorded about itself for Emacs.
+    # Where Claude Code keeps the session's conversation.
+    def transcript_path
+      File.join(state_dir, "transcripts", "#{id}.jsonl")
+    end
+
+    # What the session recorded about itself.
     def info
       JSON.parse(File.read(File.join(@base_env.fetch("SESSION_COCKPIT_STATE_DIR"), id, "session.json")))
     end
 
+    # What the monitor printed since last asked, which reaches Claude in the
+    # transcript.
     def flush_watch_output
-      @watch.read_until_quiet(timeout: TIMEOUT, quiet_period: QUIET_PERIOD)
+      @watch.read_until_quiet(timeout: TIMEOUT, quiet_period: QUIET_PERIOD).tap do
+        @transcript.monitor_event(it) unless it.empty?
+      end
     end
 
     def stop
@@ -214,6 +271,17 @@ module SessionCockpit
 
     def state_dir
       @base_env.fetch("SESSION_COCKPIT_STATE_DIR")
+    end
+
+    def fork_conversation
+      parent_id = @id
+      @id = SecureRandom.uuid
+      @transcript = @transcript.fork(transcript_path, session_id: parent_id)
+    end
+
+    def call_with_tool_use_id(name, tool_use_id, arguments)
+      request("tools/call", name: name, arguments: arguments, _meta: { "claudecode/toolUseId" => tool_use_id })
+        .then { it["content"].map { it["text"] }.join }
     end
 
     def put_into_inbox(content)
@@ -250,7 +318,7 @@ module SessionCockpit
 
     # Runs the SessionStart hook and returns what it tells Claude.
     def run_session_start_hook(source:)
-      input = JSON.generate(session_id: id, source: source, cwd: @project)
+      input = JSON.generate(session_id: id, source: source, cwd: @project, transcript_path: transcript_path)
       hook_env = @env.merge("CLAUDE_CODE_SESSION_ID" => id, "CLAUDE_PID" => @claude_pid)
       output, error, status = Open3.capture3(hook_env, EXE, "session-start", stdin_data: input)
       raise <<~MESSAGE unless status.success?
@@ -271,6 +339,100 @@ module SessionCockpit
 
         return message["result"]
       end
+    end
+  end
+
+  # A session's transcript as Claude Code writes it: entries chained through
+  # parentUuid, which a rewind goes on from an earlier entry of.
+  class TestTranscript
+    def initialize(path, leaf: nil)
+      @path = path
+      @leaf = leaf
+      @prompts = {}
+      FileUtils.mkdir_p(File.dirname(path))
+      FileUtils.touch(path)
+    end
+
+    def prompt(text)
+      @prompts[text] = write({ "type" => "user", "message" => { "role" => "user", "content" => text } })
+    end
+
+    # Claude's call of the tool NAME with TOOL_USE_ID, and its result.
+    def tool_call(name, tool_use_id)
+      write(assistant_tool_use(name, tool_use_id, message_id: "msg_#{SecureRandom.hex(8)}"))
+      write(tool_result(tool_use_id))
+    end
+
+    # Claude's call of the tool NAME in the same message as one of another
+    # tool. Claude Code writes them side by side, and the conversation goes
+    # on from the other one's result.
+    def tool_call_together_with_another(name, tool_use_id)
+      message_id = "msg_#{SecureRandom.hex(8)}"
+      other_id = "toolu_#{SecureRandom.hex(12)}"
+      other = write(assistant_tool_use("Read", other_id, message_id: message_id))
+      write(assistant_tool_use(name, tool_use_id, message_id: message_id))
+      write(tool_result(tool_use_id))
+      write(tool_result(other_id), parent: other["uuid"])
+    end
+
+    # What a monitor printed, as it reaches Claude: each line without its
+    # indentation, empty lines dropped.
+    def monitor_event(output)
+      event = output.lines.map(&:strip).reject(&:empty?).join("\n")
+      write({ "type" => "user", "message" => {
+              "role" => "user",
+              "content" => "<task-notification>\n<summary>Monitor event</summary>\n" \
+                           "<event>#{CGI.escapeHTML(event)}</event>\n</task-notification>"
+            } })
+    end
+
+    def rewind_to_before(prompt)
+      @leaf = @prompts.fetch(prompt)["parentUuid"]
+    end
+
+    # A compaction: the conversation goes on from a boundary whose logical
+    # parent is gone from the file.
+    def compact
+      write({ "type" => "system", "subtype" => "compact_boundary", "logicalParentUuid" => SecureRandom.uuid },
+            parent: nil)
+    end
+
+    # A copy of the conversation so far at PATH, as /branch makes it, each
+    # entry naming SESSION_ID as the session it came from.
+    def fork(path, session_id:)
+      chain = []
+      uuid = @leaf
+      entries = File.foreach(@path).map { JSON.parse(it) }.to_h { [it["uuid"], it] }
+      while uuid
+        chain.unshift(entries.fetch(uuid))
+        uuid = chain.first["parentUuid"]
+      end
+      File.write(path, chain.map do
+        "#{JSON.generate(it.merge("forkedFrom" => { "sessionId" => session_id, "messageUuid" => it["uuid"] }))}\n"
+      end.join)
+      TestTranscript.new(path, leaf: @leaf)
+    end
+
+    private
+
+    def assistant_tool_use(name, tool_use_id, message_id:)
+      { "type" => "assistant", "message" => {
+        "id" => message_id, "role" => "assistant",
+        "content" => [{ "type" => "tool_use", "id" => tool_use_id, "name" => name, "input" => {} }]
+      } }
+    end
+
+    def tool_result(tool_use_id)
+      { "type" => "user", "message" => {
+        "role" => "user", "content" => [{ "type" => "tool_result", "tool_use_id" => tool_use_id, "content" => "" }]
+      } }
+    end
+
+    def write(entry, parent: @leaf)
+      entry = { "uuid" => SecureRandom.uuid, "parentUuid" => parent, **entry }
+      File.write(@path, "#{JSON.generate(entry)}\n", mode: "a")
+      @leaf = entry["uuid"]
+      entry
     end
   end
 

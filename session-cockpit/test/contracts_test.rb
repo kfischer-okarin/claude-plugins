@@ -9,7 +9,7 @@ require "test_helper"
 class ContractsTest < SessionCockpit::SystemTestCase
   def test_round_trip
     session = start_session(project: "/Users/me/workspace/claude-plugins")
-    assert_equal contract_fixture("round_trip/01_session.json"), session.info
+    assert_equal contract_fixture("round_trip/01_session.json", transcript: session.transcript_path), session.info
     session.call_mcp_tool("ask", questions: [
                             question("JSON lines or SQLite?", options: [
                                        { label: "JSON lines (Recommended)", description: "Greppable and append-only" },
@@ -54,5 +54,28 @@ class ContractsTest < SessionCockpit::SystemTestCase
 
     session.submit_from_contract_fixture("anchors/02_submission.json")
     assert_equal contract_fixture("anchors/02_monitor.md"), session.flush_watch_output
+  end
+
+  def test_rewind
+    session = start_session
+    session.prompt("Plan the storage")
+    session.call_mcp_tool("ask", questions: [
+                            question("JSON lines or SQLite?", options: [
+                                       { label: "JSON lines (Recommended)", description: "Greppable and append-only" },
+                                       { label: "SQLite", description: "Queryable, but a dependency" }
+                                     ]),
+                            question("What should the log be called?")
+                          ])
+    session.prompt("I'll answer in the cockpit")
+    session.submit_from_dashboard("", answers: [{ id: "q1", selected: ["SQLite"], text: "Queries matter" },
+                                                { id: "q2", selected: [], text: "events" }])
+    session.flush_watch_output
+    session.rewind_to_before("I'll answer in the cockpit")
+    session.prompt("Go on")
+    assert_equal contract_fixture("rewind/01_get_questions.md"), session.call_mcp_tool("get_questions")
+    assert_equal contract_fixture("rewind/01_agenda.json"), session.agenda
+
+    session.submit_from_contract_fixture("rewind/02_submission.json")
+    assert_equal contract_fixture("rewind/02_monitor.md"), session.flush_watch_output
   end
 end

@@ -1,0 +1,8 @@
+{
+  "type": "submitted",
+  "comment": "Go ahead",
+  "answers": [
+    { "id": "q1", "selected": ["SQLite"], "text": "Queries matter" },
+    { "id": "q2", "selected": [], "text": "events" }
+  ]
+}
