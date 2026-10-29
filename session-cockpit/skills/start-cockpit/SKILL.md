@@ -22,9 +22,10 @@ allowed-tools: Bash(mise exec -C ${CLAUDE_PLUGIN_ROOT} -- ${CLAUDE_PLUGIN_ROOT}/
 - Move every question you asked the user in the chat that is still
   unanswered into the cockpit with `ask`, so the user finds all of them in
   one place. The questions listed above are in it already.
-- While the cockpit is on, ask everything that needs the user's answer with
-  `ask`, so that nothing waits unnoticed in the transcript. The chat stays
-  for discussion.
+- While the cockpit is on, ask with `ask` whenever you have several
+  questions for the user at once, so that none waits unnoticed in the
+  transcript. Ask a single question in the chat, where the user answers it
+  right away.
 - When you can't go on without an answer, end your turn: the user's
   submission arrives as an event and starts the next one.
 - Previews hold concrete material to compare options by, such as code or a

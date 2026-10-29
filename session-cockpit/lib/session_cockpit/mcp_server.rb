@@ -157,7 +157,8 @@ module SessionCockpit
       description "Ask the user questions in their session cockpit. Works like your AskUserQuestion tool, " \
                   "but takes any number of questions in one call and does not wait: the user answers when " \
                   "it suits them, and their submitted answers arrive later as an event of the submissions " \
-                  "monitor. While the session's cockpit is on, ask here rather than with AskUserQuestion."
+                  "monitor. While the session's cockpit is on, ask several questions here rather than " \
+                  "with AskUserQuestion; a single one goes in the chat."
       input_schema(
         properties: {
           questions: { type: "array", minItems: 1,
