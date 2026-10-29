@@ -1,6 +1,14 @@
 ---
 name: writing-agent-prompts
-description: Use before writing or changing any text an agent will read as instructions — a SKILL.md, CLAUDE.md or a file it imports, a background agent's system prompt, a subagent definition, a hook message, a reusable prompt. This includes when the edit is a side effect of another task: diagnosing why an agent behaves as it does, turning a correction or feedback into a rule, adding a guideline or sample, a move or rename that rewords the document, or designing a new agent. Principles for what belongs in agent context, what overfits, and how to phrase it.
+description: >-
+  Use before writing or changing any text an agent will read as instructions —
+  a SKILL.md, CLAUDE.md or a file it imports, a background agent's system
+  prompt, a subagent definition, a hook message, a reusable prompt. This
+  includes when the edit is a side effect of another task: diagnosing why an
+  agent behaves as it does, turning a correction or feedback into a rule,
+  adding a guideline or sample, a move or rename that rewords the document, or
+  designing a new agent. Principles for what belongs in agent context, what
+  overfits, and how to phrase it.
 ---
 
 # Writing Agent Prompts
