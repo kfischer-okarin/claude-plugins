@@ -403,9 +403,14 @@ That is through a temporary file renamed into place."
   (let* ((path (session-cockpit-test--file session "agenda.json"))
          (temp-path (concat path ".tmp")))
     (make-directory (file-name-directory path) t)
-    (with-temp-file temp-path
-      (insert (json-serialize agenda)))
+    (session-cockpit-test--write-utf-8-json temp-path agenda)
     (rename-file temp-path path t)))
+
+(defun session-cockpit-test--write-utf-8-json (path value)
+  "Write VALUE as JSON in UTF-8 to the file at PATH, as Claude Code's side does."
+  (let ((coding-system-for-write 'utf-8-unix))
+    (with-temp-file path
+      (json-insert value))))
 
 (defun session-cockpit-test--json-ready (question)
   "Return QUESTION with its options and anchors as vectors for `json-serialize'."
@@ -433,8 +438,7 @@ AGENDA is JSON as `session-cockpit-test-contract-fixture' reads it."
 INFO is JSON as `session-cockpit-test-contract-fixture' reads it."
   (let ((path (session-cockpit-test--file session "session.json")))
     (make-directory (file-name-directory path) t)
-    (with-temp-file path
-      (insert (json-serialize info)))))
+    (session-cockpit-test--write-utf-8-json path info)))
 
 (defun session-cockpit-test-contract-fixture (path &optional project)
   "Return the contract fixture at PATH: parsed if it is JSON, as text otherwise.
@@ -459,7 +463,9 @@ values are `equal' when they are the same JSON."
 Objects come as alists and arrays as vectors."
   (session-cockpit-test--sorted-keys
    (with-temp-buffer
-     (insert-file-contents path)
+     ;; As Claude Code's side reads it.
+     (let ((coding-system-for-read 'utf-8))
+       (insert-file-contents path))
      (json-parse-buffer :object-type 'alist :array-type 'array))))
 
 (defun session-cockpit-test--sorted-keys (json)

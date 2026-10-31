@@ -415,6 +415,22 @@
                      (comment . "Go ahead")
                      (type . "submitted"))))))
 
+(ert-deftest session-cockpit-test-answers-beyond-ascii-are-saved-and-submitted-as-they-are ()
+  (session-cockpit-test-with-session session
+    (session-cockpit-test-ask session "Which marker?" '("✓ check" "→ arrow"))
+    (session-cockpit-show (session-cockpit-test-session-id session))
+    (session-cockpit-test-goto-line-with "Which marker?")
+    (session-cockpit-test-user-types "1")
+    (session-cockpit-test-user-will-write "Größer, bitte 🙂"
+      (session-cockpit-test-user-types "r"))
+
+    (session-cockpit-test-user-submits-with-comment "Passt so ✓")
+
+    (should (equal (session-cockpit-test-last-submission session)
+                   '((answers . [((id . "q1") (selected . ["✓ check"]) (text . "Größer, bitte 🙂"))])
+                     (comment . "Passt so ✓")
+                     (type . "submitted"))))))
+
 (ert-deftest session-cockpit-test-a-submit-sends-the-answers-in-the-order-of-the-questions ()
   (session-cockpit-test-with-session session
     (session-cockpit-test-ask session "JSON lines or SQLite?" '("JSON lines" "SQLite"))

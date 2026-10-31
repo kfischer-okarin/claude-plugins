@@ -277,8 +277,16 @@ With neither, the question has no unsent answer."
         (when (file-exists-p path)
           (delete-file path))
       (make-directory (file-name-directory path) t)
-      (with-temp-file path
-        (insert (json-serialize answers))))))
+      (session-cockpit--write-json path answers))))
+
+(defun session-cockpit--write-json (path value)
+  "Write VALUE as JSON to the file at PATH, in UTF-8.
+`json-serialize' would give a unibyte string, whose bytes beyond ASCII a
+buffer takes as raw bytes that only raw-text can write, so saving would
+ask for a coding system."
+  (let ((coding-system-for-write 'utf-8-unix))
+    (with-temp-file path
+      (json-insert value))))
 
 (defun session-cockpit--load-unsent-answers ()
   "Take up the unsent answers saved for the current cockpit's session."
@@ -873,11 +881,11 @@ Each submission is a file of its own, named so that the inbox sorts by
 time.  Claude Code's side takes it over into the session's event log."
   (let ((inbox (expand-file-name "inbox" (expand-file-name session-id session-cockpit-state-directory))))
     (make-directory inbox t)
-    (with-temp-file (expand-file-name (format "%s-%s.json"
-                                              (format-time-string "%Y%m%dT%H%M%S.%6NZ" nil t)
-                                              (md5 (format "%s%s" (random) (emacs-pid))))
-                                      inbox)
-      (insert (json-serialize event)))))
+    (session-cockpit--write-json (expand-file-name (format "%s-%s.json"
+                                                           (format-time-string "%Y%m%dT%H%M%S.%6NZ" nil t)
+                                                           (md5 (format "%s%s" (random) (emacs-pid))))
+                                                   inbox)
+                                 event)))
 
 (defun session-cockpit--agenda (session-id)
   "Return the agenda of the session with SESSION-ID."
@@ -895,7 +903,8 @@ time.  Claude Code's side takes it over into the session's event log."
 (defun session-cockpit--read-json (path)
   "Return the JSON in the file at PATH, objects as alists and arrays as lists."
   (with-temp-buffer
-    (insert-file-contents path)
+    (let ((coding-system-for-read 'utf-8))
+      (insert-file-contents path))
     (json-parse-buffer :object-type 'alist :array-type 'list)))
 
 ;;;; Text editor
