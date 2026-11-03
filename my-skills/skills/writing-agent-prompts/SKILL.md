@@ -130,41 +130,39 @@ following the principles in this skill.
 
 ### Every Statement
 
-- Tells the Agent something it could not have deduced from its training data or
+- Tell the Agent only what it could not have deduced from its training data or
   its environment.
-- Holds in every Task of the Job. Material that only applies in some situations
-  goes after the general Statements of its section if small, and into a linked
-  document if large (see Linked Documents).
-- Describes the behavior as it is now, without contrasting it with an earlier
+- Write Statements that hold in every Task of the Job. Put material that only
+  applies in some situations after the general Statements of its section if
+  small, and into a linked document if large (see Linked Documents).
+- Describe the behavior as it is now, without contrasting it with an earlier
   version of the Prompt ("no longer…", "instead of…"): the Agent never saw that
   version, so the contrast means nothing to it.
-- Prefers, where possible, the actor as the subject and the action as a verb,
-  as Williams' *Style* recommends: "restart the backend container", not "a
+- Where possible, make the actor the subject and the action a verb, as
+  Williams' *Style* recommends: "restart the backend container", not "a
   backend container restart".
 
 ### Instructions
 
 - Instructions are how the Author intentionally steers the Agent towards desired
   behavior. The Statements together define a space of acceptable Agent behavior.
-  - Fewer general Statements are preferable to long detailed lists of focused
-    rules that guard against specific past mistakes: a focused rule excludes
-    only the named mistake, a general Statement moves the whole space.
+  - Prefer a few general Statements to long detailed lists of focused rules
+    that guard against specific past mistakes: a focused rule excludes only the
+    named mistake, a general Statement moves the whole space.
   - In general state positively what is desired rather than what is not, unless
     the behavior being negated would be an obvious but unwanted course of action
     if not explicitly forbidden.
-  - Behavior the Author deliberately leaves to the Agent's judgement can be
-    stated as such when that stops the Agent from guessing at an unstated rule.
-    Don't pin down behavior the Author doesn't care about just because it is
-    unspecified.
-- If possible each instruction should also mention its reasoning, so that the
-  Agent can make informed decisions in situations not explicitly covered.
-  Knowing the reason for an instruction also helps deciding when it is not
-  needed anymore.
-  - If the instruction can be justified logically from the contents of the
-    Background section then that counts as having its reasoning mentioned,
-    otherwise mention the reasoning in the same breath as the statement
-  - If the reasoning for an instruction turns out to be important background of
-    the Job then it belongs in the Background section
+  - State behavior the Author deliberately leaves to the Agent's judgement as
+    such when that stops the Agent from guessing at an unstated rule. Don't pin
+    down behavior the Author doesn't care about just because it is unspecified.
+- Give each instruction its reason where possible, so that the Agent can make
+  informed decisions in situations not explicitly covered. Knowing the reason
+  for an instruction also helps deciding when it is not needed anymore.
+  - An instruction that follows logically from the Background section needs no
+    reason of its own; otherwise state the reason in the same breath as the
+    instruction.
+  - Move a reason that turns out to be important background of the Job into the
+    Background section.
 
 ### Structure
 
@@ -175,16 +173,16 @@ following the principles in this skill.
     review.
   - Collectively Exhaustive: together, the sections specify all aspects of
     behavior the Author cares about.
-- Within each section, general Statements come first and special cases later.
-  An exception or special case of a single Statement sits as a sub-bullet
-  under it.
-- Canonical section names and terms in other languages, so Prompts share one
-  vocabulary regardless of repository:
+- Within each section, put general Statements first and special cases later.
+  Put an exception or special case of a single Statement as a sub-bullet under
+  it.
+- Use these canonical section names and terms in other languages, so Prompts
+  share one vocabulary regardless of repository:
   - Japanese: Background → 背景, Behavior → 進め方, Output → 出力, Job → 仕事
-- Depending on the type of Prompt some sections or topics might not be
-  applicable, for example instructions for general purpose agents (like
-  CLAUDE.md documents) probably do not need a Job description, or some skills
-  mainly contain specific workflows and not produce any output worth mentioning
+- Leave out sections or topics that don't apply to the type of Prompt. For
+  example, instructions for general purpose agents (like CLAUDE.md documents)
+  probably need no Job description, and some skills mainly contain specific
+  workflows and produce no output worth mentioning.
 
 #### Background Section
 
@@ -222,12 +220,12 @@ output or as an imperative whose verb is about saying or writing ("report",
 
 #### Linked Documents
 
-- Material that only applies in some situations of the Job and has enough volume
-  goes into a separate document. It is either a full sub-prompt with its own
+- Move material that only applies in some situations of the Job and has enough
+  volume into a separate document: either a full sub-prompt with its own
   Background, Behavior and Output for one kind of situation, or a reference of a
-  single content type: background, a workflow or an output format for certain
-  situations.
-- The link in the Prompt states what the document contains and when to open it.
-  The Agent can only use a document it knows to reach for.
+  single content type, such as background, a workflow or an output format for
+  certain situations.
+- State in the link what the document contains and when to open it. The Agent
+  can only use a document it knows to reach for.
   - A skill's description frontmatter is such a link, permanently visible to the
     Agent.
