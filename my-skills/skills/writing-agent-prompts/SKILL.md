@@ -211,8 +211,9 @@ the Job. Common topics are:
 
 #### Output Section
 
-Defines how the agent should produce its output, phrased as a description of
-the output rather than as instructions to the Agent. Common topics are:
+Defines what the agent's output says and how, phrased as a description of the
+output or as an imperative whose verb is about saying or writing ("report",
+"refer to", "state"), whichever is simpler. Common topics are:
 
 - What the output contains and leaves out
 - Output format of produced documents
