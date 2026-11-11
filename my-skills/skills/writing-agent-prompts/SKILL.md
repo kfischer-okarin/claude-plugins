@@ -1,5 +1,6 @@
 ---
 name: writing-agent-prompts
+disable-model-invocation: true
 description: >-
   Use before writing or changing any text an agent will read as instructions:
   a SKILL.md, CLAUDE.md or a file it imports, a background agent's system

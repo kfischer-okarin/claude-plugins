@@ -1,5 +1,6 @@
 ---
 name: software-design
+disable-model-invocation: true
 description: The user's personal software design principles and taste — test design, domain/application layering, seam placement, module design. ALWAYS load this skill in plan mode when planning implementation work. Also load BEFORE writing or reviewing code, writing or restructuring tests, deciding what to test or mock, placing dependency injection, designing modules or interfaces, or refactoring — not only when the user says "design".
 ---
 
