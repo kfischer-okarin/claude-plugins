@@ -1,5 +1,6 @@
 ---
 name: rough-planning
+disable-model-invocation: true
 description: Run a requirements hearing, then produce and maintain a lightweight, living plan/progress document for incremental, phase-based feature work — approved up front and revised as work proceeds, not a heavy upfront spec. Use when the user asks to plan a feature, write or update a plan or progress doc, track work across phases, or build end-to-end first and then deepen. Also use proactively when starting any non-trivial implementation that will span multiple commits.
 ---
 
